@@ -6,10 +6,10 @@ namespace ResultSharp
 {
 	internal static class Messages
 	{
-		public static string UnwrapCalledOnAnOkResult { get; } =
-			"Unwrap was called on an ok result";
+		public static string UnwrapErrCalledOnAnOkResult { get; } =
+			"UnwrapErr was called on an ok result";
 
-		public static string UnwrapCalledOnAFailedResult { get; } =
-			"Unwrap was called on a failed result";
+		public static string UnwrapCalledOnAFaultedResult { get; } =
+			"Unwrap was called on a faulted result";
 	}
 }

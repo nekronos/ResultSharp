@@ -50,9 +50,8 @@ namespace ResultSharp
 					val => Ok(val.SelectMany(x => x)),
 					err => Err(err.SelectMany(x => x)));
 
-		public static Result<U, E> AndThenTry<T, U, E>(
-			this Result<T, E> result,
-			Func<T, U> f) where E : Exception =>
+		public static Result<U, E> AndThenTry<T, U, E>(this Result<T, E> result, Func<T, U> f)
+			where E : Exception =>
 			result
 				.AndThen(x => Try<U, E>(() => f(x)));
 	}

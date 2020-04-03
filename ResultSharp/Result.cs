@@ -126,7 +126,7 @@ namespace ResultSharp
 		public T Unwrap() =>
 			Match(
 				val => val,
-				_ => throw new UnwrapException(Messages.UnwrapCalledOnAnOkResult));
+				_ => throw new UnwrapException(Messages.UnwrapCalledOnAFaultedResult));
 
 		[Pure]
 		public T UnwrapOr(T defaultValue) =>
@@ -139,7 +139,7 @@ namespace ResultSharp
 		[Pure]
 		public E UnwrapErr() =>
 			Match(
-				_ => throw new UnwrapException(Messages.UnwrapCalledOnAFailedResult),
+				_ => throw new UnwrapException(Messages.UnwrapErrCalledOnAnOkResult),
 				err => err);
 
 		[Pure]
@@ -217,14 +217,10 @@ namespace ResultSharp
 			};
 
 		[Pure]
-		public override int GetHashCode()
-		{
-			var state = State;
-			var hashCode = Match(
-				val => Tuple.Create(state, val).GetHashCode(),
-				err => Tuple.Create(state, err).GetHashCode());
-			return hashCode;
-		}
+		public override int GetHashCode() =>
+			Match(
+				val => Tuple.Create(ResultState.Ok, val).GetHashCode(),
+				err => Tuple.Create(ResultState.Err, err).GetHashCode());
 	}
 
 	public struct ResultOk<T> where T : notnull
