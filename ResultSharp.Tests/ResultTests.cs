@@ -79,5 +79,47 @@ namespace ResultSharp.Tests
 
 			unwrapErr.Should().NotThrow("because the result is faulted");
 		}
+
+		[Fact]
+		public void Match_OkResult_ShouldReturnTheValue()
+		{
+			Result<int, string> result = Ok(10);
+
+			var actual = result.Match(value => value, _ => -1);
+
+			actual.Should().Be(10);
+		}
+
+		[Fact]
+		public void Match_FaultedResult_ShouldReturnTheError()
+		{
+			Result<string, int> result = Err(-1);
+
+			var actual = result.Match(_ => 10, err => err);
+
+			actual.Should().Be(-1);
+		}
+
+		[Fact]
+		public void Map_OkResult_ShouldReturnOkResultWithMappedValue()
+		{
+			Result<int, string> result = Ok(10);
+
+			var expected = Ok(20);
+			var actual = result.Map(val => val * 2);
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void MapErr_FaultedResult_ShouldReturnFaultedResultWithMappedError()
+		{
+			Result<string, int> result = Err(0);
+
+			var expected = Err("code: 0");
+			var actual = result.MapErr(err => $"code: {err}");
+
+			actual.Should().Be(expected);
+		}
 	}
 }
