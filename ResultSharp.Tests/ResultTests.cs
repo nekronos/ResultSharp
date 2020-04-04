@@ -51,6 +51,46 @@ namespace ResultSharp.Tests
 		}
 
 		[Fact]
+		public void UnwrapOr_OkResult_ShouldReturnValue()
+		{
+			Result<int, string> result = Ok(0);
+
+			var actual = result.UnwrapOr(-1);
+
+			actual.Should().Be(0);
+		}
+
+		[Fact]
+		public void UnwrapOr_FaultedResult_ShouldReturnOtherValue()
+		{
+			Result<int, string> result = Err("err");
+
+			var actual = result.UnwrapOr(0);
+
+			actual.Should().Be(0);
+		}
+
+		[Fact]
+		public void UnwrapOrElse_OkResult_ShouldReturnOkValue()
+		{
+			Result<int, string> result = Ok(0);
+
+			var actual = result.UnwrapOrElse(() => -1);
+
+			actual.Should().Be(0);
+		}
+
+		[Fact]
+		public void UnwrapOrElse_FaultedResult_ShouldReturnValueFromClosure()
+		{
+			Result<int, string> result = Err("err");
+
+			var actual = result.UnwrapOrElse(() => 0);
+
+			actual.Should().Be(0);
+		}
+
+		[Fact]
 		public void UnwrapErr_OkResult_ShouldThrow()
 		{
 			Result<int, string> result = Ok(0);
