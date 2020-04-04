@@ -14,7 +14,7 @@ namespace ResultSharp
 	}
 
 	[Serializable]
-	public struct Result<T, E> : ISerializable
+	public readonly struct Result<T, E> : ISerializable
 		where T : notnull
 		where E : notnull
 	{
