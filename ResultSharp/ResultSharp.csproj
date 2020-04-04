@@ -3,6 +3,17 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>8.0</LangVersion>
+		<OutputType>library</OutputType>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>ResultSharp</PackageId>
+		<Title>ResultSharp</Title>
+		<Authors>Vegard Strand Lende</Authors>
+		<Summary>Result monad for C#</Summary>
+		<PackageTags>C#, Functional, Monad, Pattern Matching, Result</PackageTags>
+		<PackageProjectUrl>https://github.com/nekronos/ResultSharp</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/nekronos/ResultSharp/blob/master/LICENSE</PackageLicenseUrl>
 	</PropertyGroup>
 
 </Project>
