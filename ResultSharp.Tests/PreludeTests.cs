@@ -7,26 +7,12 @@ namespace ResultSharp.Tests
 {
 	public class PreludeTests
 	{
-		class DivideByZeroException : Exception
-		{
-			public override bool Equals(object obj) =>
-				obj is DivideByZeroException ? true : false;
-		}
-
-		static int Divide(int dividend, int divisor) =>
-			divisor switch
-			{
-				0 => throw new DivideByZeroException(),
-				_ => dividend / divisor,
-			};
-
-
 		[Fact]
 		public void Try_CatchesException_ReturnsFaultedResult()
 		{
 			Result<int, Exception> expected = Err<Exception>(new DivideByZeroException());
 
-			Result<int, Exception> actual = Try(() => Divide(10, 0));
+			Result<int, Exception> actual = Try(() => TestStubs.Divide(10, 0));
 
 			actual.Should().Be(expected);
 		}
@@ -36,7 +22,7 @@ namespace ResultSharp.Tests
 		{
 			var expected = Err(new DivideByZeroException());
 
-			var actual = Try<int, DivideByZeroException>(() => Divide(10, 0));
+			var actual = Try<int, DivideByZeroException>(() => TestStubs.Divide(10, 0));
 
 			actual.Should().Be(expected);
 		}
