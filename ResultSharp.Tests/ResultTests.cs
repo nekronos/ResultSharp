@@ -355,5 +355,31 @@ namespace ResultSharp.Tests
 
 			expectErr.Should().NotThrow().Which.Should().Be(-1);
 		}
+
+		[Fact]
+		public void Serialize_And_Deserialize_OkResult()
+		{
+			Result<string, int> result = Ok("fooBAR");
+
+			var bin = SerializationHelpers.Serialize(result);
+
+			var expected = result;
+			var actual = SerializationHelpers.Deserialize<Result<string, int>>(bin);
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void Serialize_And_Deserialize_FaultedResult()
+		{
+			Result<string, int> result = Err(-1);
+
+			var bin = SerializationHelpers.Serialize(result);
+
+			var expected = result;
+			var actual = SerializationHelpers.Deserialize<Result<string, int>>(bin);
+
+			actual.Should().Be(expected);
+		}
 	}
 }
