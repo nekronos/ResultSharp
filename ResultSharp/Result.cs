@@ -197,6 +197,14 @@ namespace ResultSharp
 			Match(_ => false, err => err.Equals(other));
 
 		[Pure]
+		public bool Equals(ResultOk<T> resultOk) =>
+			Equals(resultOk.Value);
+
+		[Pure]
+		public bool Equals(ResultErr<E> resultErr) =>
+			Equals(resultErr.Error);
+
+		[Pure]
 		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
 			a.Equals(b);
 
