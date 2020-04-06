@@ -222,18 +222,4 @@ namespace ResultSharp
 				val => Tuple.Create(ResultState.Ok, val).GetHashCode(),
 				err => Tuple.Create(ResultState.Err, err).GetHashCode());
 	}
-
-	public struct ResultOk<T> where T : notnull
-	{
-		internal readonly T Value;
-		internal ResultOk(T value) =>
-			Value = value;
-	}
-
-	public struct ResultErr<E> where E : notnull
-	{
-		internal readonly E Error;
-		internal ResultErr(E error) =>
-			Error = error;
-	}
 }
