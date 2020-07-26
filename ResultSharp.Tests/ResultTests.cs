@@ -426,5 +426,39 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void GetHashCode_FromOkResult_ShouldReturnHashCodeDifferentFromInnerValue()
+		{
+			Result<string, int> result = Ok("foobar");
+
+			var valueHashCode = result.Unwrap().GetHashCode();
+			var resultHashCode = result.GetHashCode();
+
+			Assert.NotEqual(valueHashCode, resultHashCode);
+		}
+
+		[Fact]
+		public void GetHashCoide_FromFaultedResult_ShouldReturnHashCodeDifferentFromErrorValue()
+		{
+			Result<int, string> result = Err("foobar");
+
+			var errHashCode = result.UnwrapErr().GetHashCode();
+			var resultHashCode = result.GetHashCode();
+
+			Assert.NotEqual(errHashCode, resultHashCode);
+		}
+
+		[Fact]
+		public void GetHashCode_FromOkAndErrResult_ShouldReturnDifferentHashCodes()
+		{
+			Result<string, string> ok = Ok("foobar");
+			Result<string, string> err = Err("foobar");
+
+			var okHashCode = ok.GetHashCode();
+			var errHashCode = err.GetHashCode();
+
+			Assert.NotEqual(okHashCode, errHashCode);
+		}
 	}
 }

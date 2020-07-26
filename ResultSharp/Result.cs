@@ -9,7 +9,7 @@ namespace ResultSharp
 {
 	internal enum ResultState
 	{
-		Ok,
+		Ok = 1,
 		Err,
 	}
 
@@ -243,7 +243,7 @@ namespace ResultSharp
 		[Pure]
 		public override int GetHashCode() =>
 			Match(
-				val => Tuple.Create(ResultState.Ok, val).GetHashCode(),
-				err => Tuple.Create(ResultState.Err, err).GetHashCode());
+				val => HashCode.Combine(ResultState.Ok, val),
+				err => HashCode.Combine(ResultState.Err, err));
 	}
 }
