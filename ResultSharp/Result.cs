@@ -15,8 +15,6 @@ namespace ResultSharp
 
 	[Serializable]
 	public readonly struct Result<T, E> : ISerializable
-		where T : notnull
-		where E : notnull
 	{
 		readonly ResultState State;
 		readonly T Value;
@@ -91,35 +89,35 @@ namespace ResultSharp
 				: err(Error);
 
 		[Pure]
-		public Result<U, E> Map<U>(Func<T, U> op) where U : notnull =>
+		public Result<U, E> Map<U>(Func<T, U> op) =>
 			Match<Result<U, E>>(val => op(val), err => err);
 
 		[Pure]
-		public U MapOr<U>(Func<T, U> op, U defaultValue) where U : notnull =>
+		public U MapOr<U>(Func<T, U> op, U defaultValue) =>
 			Match(op, _ => defaultValue);
 
 		[Pure]
-		public U MapOrElse<U>(Func<T, U> op, Func<E, U> elseOp) where U : notnull =>
+		public U MapOrElse<U>(Func<T, U> op, Func<E, U> elseOp) =>
 			Match(op, elseOp);
 
 		[Pure]
-		public Result<T, F> MapErr<F>(Func<E, F> op) where F : notnull =>
+		public Result<T, F> MapErr<F>(Func<E, F> op) =>
 			Match<Result<T, F>>(val => val, err => op(err));
 
 		[Pure]
-		public Result<U, E> And<U>(Result<U, E> result) where U : notnull =>
+		public Result<U, E> And<U>(Result<U, E> result) =>
 			Match(_ => result, err => err);
 
 		[Pure]
-		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) where U : notnull =>
+		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
 			Match(val => op(val), err => err);
 
 		[Pure]
-		public Result<T, F> Or<F>(Result<T, F> result) where F : notnull =>
+		public Result<T, F> Or<F>(Result<T, F> result) =>
 			Match(val => val, _ => result);
 
 		[Pure]
-		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) where F : notnull =>
+		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
 			Match(val => val, err => op(err));
 
 		[Pure]
@@ -155,10 +153,14 @@ namespace ResultSharp
 				err => err);
 
 		[Pure]
+		static string ToStringNullSafe<U>(U val) =>
+			val?.ToString() ?? "null";
+
+		[Pure]
 		public override string ToString() =>
 			Match(
-				val => $"Ok({val})",
-				err => $"Err({err})");
+				val => $"Ok({ToStringNullSafe(val)})",
+				err => $"Err({ToStringNullSafe(err)})");
 
 		[Pure]
 		public static Result<T, E> Ok(T value) =>

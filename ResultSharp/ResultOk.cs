@@ -1,6 +1,6 @@
 ﻿namespace ResultSharp
 {
-	public readonly struct ResultOk<T> where T : notnull
+	public readonly struct ResultOk<T>
 	{
 		internal readonly T Value;
 		internal ResultOk(T value) =>
