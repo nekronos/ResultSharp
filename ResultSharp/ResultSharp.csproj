@@ -15,6 +15,7 @@
 		<Summary>Result monad for C#</Summary>
 		<PackageTags>C#, Functional, Monad, Pattern Matching, Result, Error handling</PackageTags>
 		<PackageProjectUrl>https://github.com/nekronos/ResultSharp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/nekronos/ResultSharp</RepositoryUrl>
 		<PackageLicense>https://github.com/nekronos/ResultSharp/blob/master/LICENSE</PackageLicense>
 	</PropertyGroup>
 
