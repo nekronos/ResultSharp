@@ -169,6 +169,22 @@ namespace ResultSharp
 			new Result<T, E>(error);
 
 		[Pure]
+		public static Result<T, E> OkIf(
+			bool condition,
+			T value,
+			E error) => condition
+				? Ok(value)
+				: Err(error);
+
+		[Pure]
+		public static Result<T, E> OkIf(
+			bool condition,
+			Func<T> getValue,
+			Func<E> getError) => condition
+				? Ok(getValue())
+				: Err(getError());
+
+		[Pure]
 		public static implicit operator Result<T, E>(T value) =>
 			Ok(value);
 
