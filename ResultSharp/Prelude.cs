@@ -10,6 +10,38 @@ namespace ResultSharp
 		public static ResultErr<E> Err<E>(E error) where E : notnull =>
 			new ResultErr<E>(error);
 
+		public static Result<T, E> OkIf<T, E>(
+			bool condition,
+			T value,
+			E error)
+			where T : notnull
+			where E : notnull =>
+				Result<T, E>.OkIf(condition, value, error);
+
+		public static Result<T, E> OkIf<T, E>(
+			bool condition,
+			Func<T> getValue,
+			Func<E> getError)
+			where T : notnull
+			where E : notnull =>
+				Result<T, E>.OkIf(condition, getValue, getError);
+
+		public static Result<T, E> ErrIf<T, E>(
+			bool condition,
+			T value,
+			E error)
+			where T : notnull
+			where E : notnull =>
+				OkIf(!condition, value, error);
+
+		public static Result<T, E> ErrIf<T, E>(
+			bool condition,
+			Func<T> getValue,
+			Func<E> getError)
+			where T : notnull
+			where E : notnull =>
+				OkIf(!condition, getValue, getError);
+
 		public static Result<T, Exception> Try<T>(Func<T> op) =>
 			Try<T, Exception>(op);
 

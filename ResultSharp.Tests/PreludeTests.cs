@@ -26,5 +26,15 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void OkIf_FalseCondition_ReturnsFaultedResult()
+		{
+			var expected = Err(1);
+
+			var actual = OkIf(false, 0, 1);
+
+			actual.Should().Be(expected);
+		}
 	}
 }
