@@ -460,5 +460,27 @@ namespace ResultSharp.Tests
 
 			Assert.NotEqual(okHashCode, errHashCode);
 		}
+
+		[Fact]
+		public void ToString_OkResult_ShouldReturnOkStringWithValue()
+		{
+			Result<string, int> result = Ok("foobar");
+
+			var expected = "Ok(foobar)";
+			var actual = result.ToString();
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void ToString_OkResultOfNullableType_ShouldReturnOkStringWithNull()
+		{
+			Result<string?, int> result = Ok<string?>(null);
+
+			var expected = "Ok(null)";
+			var actual = result.ToString();
+
+			actual.Should().Be(expected);
+		}
 	}
 }

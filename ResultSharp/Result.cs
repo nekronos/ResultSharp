@@ -24,13 +24,13 @@ namespace ResultSharp
 		{
 			State = ResultState.Ok;
 			Value = value;
-			Error = default;
+			Error = default!;
 		}
 
 		Result(E error)
 		{
 			State = ResultState.Err;
-			Value = default;
+			Value = default!;
 			Error = error;
 		}
 
@@ -43,11 +43,11 @@ namespace ResultSharp
 			{
 				case ResultState.Ok:
 					Value = (T)info.GetValue(nameof(Value), typeof(T));
-					Error = default;
+					Error = default!;
 					break;
 
 				case ResultState.Err:
-					Value = default;
+					Value = default!;
 					Error = (E)info.GetValue(nameof(Error), typeof(E));
 					break;
 
@@ -208,11 +208,11 @@ namespace ResultSharp
 
 		[Pure]
 		public bool Equals(T other) =>
-			Match(val => val.Equals(other), _ => false);
+			Match(val => val!.Equals(other), _ => false);
 
 		[Pure]
 		public bool Equals(E other) =>
-			Match(_ => false, err => err.Equals(other));
+			Match(_ => false, err => err!.Equals(other));
 
 		[Pure]
 		public bool Equals(ResultOk<T> resultOk) =>
