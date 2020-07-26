@@ -482,5 +482,21 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void Equals_OkResultContainingNull_ShouldReturnTrue()
+		{
+			Result<string?, int> result = Ok<string?>(null);
+
+			result.Equals(null).Should().BeTrue();
+		}
+
+		[Fact]
+		public void Equals_FaultedResultContainingNull_ShouldReturnTrue()
+		{
+			Result<int, int?> result = Err<int?>(null);
+
+			result.Equals(null).Should().BeTrue();
+		}
 	}
 }

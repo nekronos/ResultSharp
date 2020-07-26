@@ -199,17 +199,20 @@ namespace ResultSharp
 		public static implicit operator Result<T, E>(ResultErr<E> err) =>
 			Err(err.Error);
 
+		static bool EqualsNullSafe<U>(U a, U b) =>
+			a?.Equals(b) ?? b == null;
+
 		[Pure]
 		public bool Equals(Result<T, E> other) =>
 			other.Match(Equals, Equals);
 
 		[Pure]
 		public bool Equals(T other) =>
-			Match(val => val!.Equals(other), _ => false);
+			Match(val => EqualsNullSafe(val, other), _ => false);
 
 		[Pure]
 		public bool Equals(E other) =>
-			Match(_ => false, err => err!.Equals(other));
+			Match(_ => false, err => EqualsNullSafe(err, other));
 
 		[Pure]
 		public bool Equals(ResultOk<T> resultOk) =>
