@@ -53,5 +53,41 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void Combine_MixedResultsWithoutTypeArgs_ReturnsCombinedErrorMessage()
+		{
+			IEnumerable<Result> results = new Result[]
+			{
+				Ok(),
+				Err("foo"),
+				Ok(),
+				Err("bar"),
+				Ok(),
+				Err("baz")
+			};
+
+			var expected = Err("foo\nbar\nbaz");
+			var actual = results.Combine("\n");
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void Combine_OkResultsWithoutTypeArgs_ReturnsOk()
+		{
+			IEnumerable<Result> results = new Result[]
+			{
+				Ok(),
+				Ok(),
+				Ok(),
+				Ok(),
+			};
+
+			var expected = Ok();
+			var actual = results.Combine("\n");
+
+			actual.Should().Be(expected);
+		}
 	}
 }

@@ -25,6 +25,11 @@ namespace ResultSharp
 			Func<E> getError) =>
 				Result<T, E>.OkIf(condition, getValue, getError);
 
+		public static Result OkIf(
+			bool condition,
+			string error) =>
+				OkIf(condition, new Unit(), error);
+
 		public static Result<T, E> ErrIf<T, E>(
 			bool condition,
 			T value,
@@ -36,6 +41,11 @@ namespace ResultSharp
 			Func<T> getValue,
 			Func<E> getError) =>
 				OkIf(!condition, getValue, getError);
+
+		public static Result ErrIf(
+			bool condition,
+			string error) =>
+			ErrIf(condition, new Unit(), error);
 
 		public static Result<T, Exception> Try<T>(Func<T> op) =>
 			Try<T, Exception>(op);

@@ -7,6 +7,48 @@ namespace ResultSharp
 {
 	public static class ResultExtensions
 	{
+		static string? CombineErrorMessages<R>(
+			IEnumerable<R> results,
+			string errorMessageSeparator) where R : IResult
+		{
+			var errors = results
+				.Where(x => x.IsErr)
+				.Select(x => x.UnwrapErrUntyped().ToString());
+
+			var errorMessage = string.Join(errorMessageSeparator, errors);
+			if (string.IsNullOrEmpty(errorMessage))
+				return null;
+			else
+				return errorMessage;
+		}
+
+		public static Result Combine(
+			this IEnumerable<Result> results,
+			string errorMessageSeparator)
+		{
+			var combinedError = CombineErrorMessages(results, errorMessageSeparator);
+			if (string.IsNullOrEmpty(combinedError))
+				return Result.Ok();
+			else
+				return Result.Err(combinedError);
+		}
+
+		public static Result<IEnumerable<T>> Combine<T>(
+			this IEnumerable<Result<T>> results,
+			string errorMessageSeparator)
+		{
+			var combinedError = CombineErrorMessages(results, errorMessageSeparator);
+			if (string.IsNullOrEmpty(combinedError))
+			{
+				var oks = results
+					.Select(x => x.Unwrap())
+					.ToArray();
+				return Ok<IEnumerable<T>>(oks);
+			}
+			else
+				return Err(combinedError);
+		}
+
 		public static Result<IEnumerable<T>, IEnumerable<E>> Combine<T, E>(
 			this IEnumerable<Result<T, E>> results)
 		{

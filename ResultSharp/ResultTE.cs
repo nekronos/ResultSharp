@@ -11,7 +11,10 @@ namespace ResultSharp
 	}
 
 	[Serializable]
-	public readonly struct Result<T, E> : ISerializable
+	public readonly struct Result<T, E> :
+		ISerializable,
+		IEquatable<Result<T,E>>,
+		IResult
 	{
 		readonly ResultState State;
 		readonly T Value;
@@ -239,5 +242,8 @@ namespace ResultSharp
 			Match(
 				val => HashCode.Combine(ResultState.Ok, val),
 				err => HashCode.Combine(ResultState.Err, err));
+
+		object IResult.UnwrapErrUntyped() =>
+			throw new NotImplementedException();
 	}
 }

@@ -7,7 +7,10 @@ using System.Text;
 namespace ResultSharp
 {
 	[Serializable]
-	public readonly struct Result<T> : ISerializable
+	public readonly struct Result<T> :
+		ISerializable,
+		IEquatable<Result<T>>,
+		IResult
 	{
 		readonly Result<T, string> Inner;
 
@@ -23,6 +26,10 @@ namespace ResultSharp
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
+
+		public bool IsOk => Inner.IsOk;
+
+		public bool IsErr => Inner.IsErr;
 
 		[Pure]
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
@@ -113,10 +120,20 @@ namespace ResultSharp
 
 		[Pure]
 		public override bool Equals(object obj) =>
-			Inner.Equals(obj);
+			obj switch
+			{
+				Result<T> x => Equals(x),
+				_ => Inner.Equals(obj),
+			};
 
 		[Pure]
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
+
+		object IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
+
+		public bool Equals(Result<T> other) =>
+			Inner.Equals(other.Inner);
 	}
 }

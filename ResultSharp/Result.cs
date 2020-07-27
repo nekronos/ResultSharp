@@ -4,13 +4,12 @@ using System.Runtime.Serialization;
 
 namespace ResultSharp
 {
-	public struct Unit { }
-
 	[Serializable]
-	public readonly partial struct Result : ISerializable
+	public readonly struct Result :
+		ISerializable,
+		IEquatable<Result>,
+		IResult
 	{
-		static Unit unit { get; } = new Unit();
-
 		readonly Result<Unit, string> Inner;
 
 		Result(Result<Unit, string> inner) =>
@@ -26,14 +25,17 @@ namespace ResultSharp
 		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
+		static readonly Result DefaultOk =
+			new Result(Unit.Default);
+
 		public static Result Ok() =>
-			new Result(unit);
+			DefaultOk;
 
 		public static Result Err(string error) =>
 			new Result(error);
 
-		public static implicit operator Result(ResultOk<Unit> resultOk) =>
-			Ok();
+		public static implicit operator Result(ResultOk<Unit> _) =>
+			DefaultOk;
 
 		public static implicit operator Result(ResultErr<string> resultErr) =>
 			Err(resultErr.Error);
@@ -43,6 +45,10 @@ namespace ResultSharp
 
 		public static implicit operator Result<Unit, string>(Result result) =>
 			result.Inner;
+
+		public bool IsOk => Inner.IsOk;
+
+		public bool IsErr => Inner.IsErr;
 
 		[Pure]
 		public Result<T> Map<T>(Func<T> op) =>
@@ -79,10 +85,20 @@ namespace ResultSharp
 		public override string ToString() =>
 			Inner.Match(_ => "Ok()", err => $"Err({err})");
 
+		public bool Equals(Result result) =>
+			Inner.Equals(result.Inner);
+
 		public override bool Equals(object obj) =>
-			Inner.Equals(obj);
+			obj switch
+			{
+				Result x => Equals(x),
+				_ => Inner.Equals(obj),
+			};
 
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
+
+		object IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
 	}
 }
