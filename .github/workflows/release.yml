@@ -12,10 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project
+      - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.101
+      - name: Build project
         run: dotnet publish ResultSharp/ResultSharp.csproj --configuration Release --output bin
       - Name: Zip Assets
         run: |
