@@ -208,46 +208,6 @@ namespace ResultSharp.Tests
 		}
 
 		[Fact]
-		public void MapOr_OkResult_ShouldReturnMappedValue()
-		{
-			Result<int, string> result = Ok(10);
-
-			var actual = result.MapOr(x => x * 3, -1);
-
-			actual.Should().Be(30);
-		}
-
-		[Fact]
-		public void MapOr_FaultedResult_ShouldReturnDefaultValue()
-		{
-			Result<string, int> result = Err(0);
-
-			var actual = result.MapOr(x => x.Length, 10);
-
-			actual.Should().Be(10);
-		}
-
-		[Fact]
-		public void MapOrElse_OkResult_ShouldReturnMappedValue()
-		{
-			Result<int, string> result = Ok(10);
-
-			var actual = result.MapOrElse(x => x * 3, _ => -1);
-
-			actual.Should().Be(30);
-		}
-
-		[Fact]
-		public void MapOrElse_FaultedResult_ShouldReturnValueFromElseClosure()
-		{
-			Result<string, int> result = Err(1);
-
-			var actual = result.MapOrElse(_ => -1, err => err);
-
-			actual.Should().Be(1);
-		}
-
-		[Fact]
 		public void MapErr_FaultedResult_ShouldReturnFaultedResultWithMappedError()
 		{
 			Result<string, int> result = Err(0);

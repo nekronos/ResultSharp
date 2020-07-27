@@ -90,14 +90,6 @@ namespace ResultSharp
 			Match<Result<U, E>>(val => op(val), err => err);
 
 		[Pure]
-		public U MapOr<U>(Func<T, U> op, U defaultValue) =>
-			Match(op, _ => defaultValue);
-
-		[Pure]
-		public U MapOrElse<U>(Func<T, U> op, Func<E, U> elseOp) =>
-			Match(op, elseOp);
-
-		[Pure]
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
 			Match<Result<T, F>>(val => val, err => op(err));
 
