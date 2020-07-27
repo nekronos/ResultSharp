@@ -57,6 +57,7 @@ namespace ResultSharp.Tests
 			var actual = Result<string, int>.OkIf(false, string.Empty, -1);
 
 			actual.Should().Be(expected);
+
 		}
 
 		[Fact]
