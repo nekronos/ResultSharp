@@ -1,1 +1,1 @@
-# ResultSharp ![build status](https://github.com/nekronos/ResultSharp/workflows/dotnetcore/badge.svg)
+# ResultSharp ![Build and Test](https://github.com/nekronos/ResultSharp/workflows/Build%20and%20Test/badge.svg)
