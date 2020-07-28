@@ -13,17 +13,15 @@ namespace ResultSharp
 		public static ResultErr<E> Err<E>(E error) =>
 			new ResultErr<E>(error);
 
-		public static Result<T, E> OkIf<T, E>(
-			bool condition,
-			T value,
-			E error) =>
-				Result<T, E>.OkIf(condition, value, error);
+		public static Result<T, E> OkIf<T, E>(bool condition, T value, E error) =>
+			condition
+				? Result<T, E>.Ok(value)
+				: Result<T, E>.Err(error);
 
-		public static Result<T, E> OkIf<T, E>(
-			bool condition,
-			Func<T> getValue,
-			Func<E> getError) =>
-				Result<T, E>.OkIf(condition, getValue, getError);
+		public static Result<T, E> OkIf<T, E>(bool condition, Func<T> getValue, Func<E> getError) =>
+			condition
+				? Result<T,E>.Ok(getValue())
+				: Result<T,E>.Err(getError());
 
 		public static Result OkIf(
 			bool condition,

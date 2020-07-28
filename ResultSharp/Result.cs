@@ -21,7 +21,9 @@ namespace ResultSharp
 			Inner = (Result<Unit, string>)info.GetValue(nameof(Inner), typeof(Result<Unit, string>));
 		}
 
-		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
+		public void GetObjectData(
+			SerializationInfo info,
+			StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
 		static readonly Result DefaultOk =
@@ -32,18 +34,6 @@ namespace ResultSharp
 
 		public static Result Err(string error) =>
 			new Result(error);
-
-		public static implicit operator Result(ResultOk<Unit> _) =>
-			DefaultOk;
-
-		public static implicit operator Result(ResultErr<string> resultErr) =>
-			Err(resultErr.Error);
-
-		public static implicit operator Result(Result<Unit, string> result) =>
-			new Result(result);
-
-		public static implicit operator Result<Unit, string>(Result result) =>
-			result.Inner;
 
 		public bool IsOk => Inner.IsOk;
 
@@ -96,5 +86,17 @@ namespace ResultSharp
 
 		object IResult.UnwrapErrUntyped() =>
 			UnwrapErr();
+
+		public static implicit operator Result(ResultOk<Unit> _) =>
+			DefaultOk;
+
+		public static implicit operator Result(ResultErr<string> resultErr) =>
+			Err(resultErr.Error);
+
+		public static implicit operator Result(Result<Unit, string> result) =>
+			new Result(result);
+
+		public static implicit operator Result<Unit, string>(Result result) =>
+			result.Inner;
 	}
 }

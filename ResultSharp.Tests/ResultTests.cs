@@ -40,53 +40,6 @@ namespace ResultSharp.Tests
 		}
 
 		[Fact]
-		public void OkIf_ConditionIsTrue_ReturnsOkResult()
-		{
-			var expected = Ok(1);
-
-			var actual = Result<int, string>.OkIf(true, 1, string.Empty);
-
-			actual.Should().Be(expected);
-		}
-
-		[Fact]
-		public void OkIf_ConditionIsFalse_ReturnsFaultedResult()
-		{
-			var expected = Err(-1);
-
-			var actual = Result<string, int>.OkIf(false, string.Empty, -1);
-
-			actual.Should().Be(expected);
-
-		}
-
-		[Fact]
-		public void OkIf_ConditionIsTrue_ReturnsOkValueFromDelegate()
-		{
-			var expected = Ok("ok");
-
-			var actual = Result<string, int>.OkIf(
-				true,
-				() => "ok",
-				() => throw new Exception());
-
-			actual.Should().Be(expected);
-		}
-
-		[Fact]
-		public void OkIf_ConditionIsFalse_ReturnsErrFromDelegate()
-		{
-			var expected = Err(-1);
-
-			var actual = Result<string, int>.OkIf(
-				false,
-				() => throw new Exception(),
-				() => -1);
-
-			actual.Should().Be(expected);
-		}
-
-		[Fact]
 		public void Unwrap_OkResult_ShouldNotThrow()
 		{
 			Result<int, string> result = Ok(0);

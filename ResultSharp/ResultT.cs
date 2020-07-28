@@ -9,7 +9,7 @@ namespace ResultSharp
 		IEquatable<Result<T>>,
 		IResult
 	{
-		readonly Result<T, string> Inner;
+		internal readonly Result<T, string> Inner;
 
 		Result(Result<T, string> inner) =>
 			Inner = inner;
@@ -27,6 +27,12 @@ namespace ResultSharp
 		public bool IsOk => Inner.IsOk;
 
 		public bool IsErr => Inner.IsErr;
+
+		public static Result<T> Ok(T value) =>
+			new Result<T>(Result<T, string>.Ok(value));
+
+		public static Result<T> Err(string error) =>
+			new Result<T>(Result<T, string>.Err(error));
 
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
 			Inner.Match(ok, err);
@@ -46,8 +52,8 @@ namespace ResultSharp
 		public Result<T> Or(Result<T> result) =>
 			Inner.Or(result.Inner);
 
-		public Result<T> OrElse(Func<string, Result<T>> op) =>
-			Inner.OrElse<string>(x => op(x));
+		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
+			Inner.OrElse(x => op(x));
 
 		public T Unwrap() =>
 			Inner.Unwrap();
@@ -66,30 +72,6 @@ namespace ResultSharp
 
 		public string ExpectErr(string msg) =>
 			Inner.ExpectErr(msg);
-
-		public static Result<T> Ok(T value) =>
-			new Result<T>(Result<T, string>.Ok(value));
-
-		public static Result<T> Err(string error) =>
-			new Result<T>(Result<T, string>.Err(error));
-
-		public static implicit operator Result<T>(T value) =>
-			Ok(value);
-
-		public static implicit operator Result<T>(string error) =>
-			Err(error);
-
-		public static implicit operator Result<T>(ResultOk<T> resultOk) =>
-			new Result<T>(resultOk);
-
-		public static implicit operator Result<T>(ResultErr<string> resultErr) =>
-			new Result<T>(resultErr);
-
-		public static implicit operator Result<T, string>(Result<T> result) =>
-			result.Inner;
-
-		public static implicit operator Result<T>(Result<T, string> result) =>
-			new Result<T>(result);
 
 		public override string ToString() =>
 			Inner.ToString();
@@ -111,5 +93,29 @@ namespace ResultSharp
 
 		object IResult.UnwrapErrUntyped() =>
 			UnwrapErr();
+
+		public static bool operator ==(Result<T> a, Result<T> b) =>
+			a.Equals(b);
+
+		public static bool operator !=(Result<T> a, Result<T> b) =>
+			!(a == b);
+
+		public static implicit operator Result<T>(T value) =>
+			Ok(value);
+
+		public static implicit operator Result<T>(string error) =>
+			Err(error);
+
+		public static implicit operator Result<T>(ResultOk<T> resultOk) =>
+			new Result<T>(resultOk);
+
+		public static implicit operator Result<T>(ResultErr<string> resultErr) =>
+			new Result<T>(resultErr);
+
+		public static implicit operator Result<T, string>(Result<T> result) =>
+			result.Inner;
+
+		public static implicit operator Result<T>(Result<T, string> result) =>
+			new Result<T>(result);
 	}
 }

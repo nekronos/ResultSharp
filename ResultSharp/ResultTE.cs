@@ -13,7 +13,7 @@ namespace ResultSharp
 	[Serializable]
 	public readonly struct Result<T, E> :
 		ISerializable,
-		IEquatable<Result<T,E>>,
+		IEquatable<Result<T, E>>,
 		IResult
 	{
 		readonly ResultState State;
@@ -142,32 +142,6 @@ namespace ResultSharp
 		public static Result<T, E> Err(E error) =>
 			new Result<T, E>(error);
 
-		public static Result<T, E> OkIf(
-			bool condition,
-			T value,
-			E error) => condition
-				? Ok(value)
-				: Err(error);
-
-		public static Result<T, E> OkIf(
-			bool condition,
-			Func<T> getValue,
-			Func<E> getError) => condition
-				? Ok(getValue())
-				: Err(getError());
-
-		public static implicit operator Result<T, E>(T value) =>
-			Ok(value);
-
-		public static implicit operator Result<T, E>(E error) =>
-			Err(error);
-
-		public static implicit operator Result<T, E>(ResultOk<T> ok) =>
-			Ok(ok.Value);
-
-		public static implicit operator Result<T, E>(ResultErr<E> err) =>
-			Err(err.Error);
-
 		static bool EqualsNullSafe<U>(U a, U b) =>
 			a?.Equals(b) ?? b == null;
 
@@ -179,18 +153,6 @@ namespace ResultSharp
 
 		public bool Equals(E other) =>
 			Match(_ => false, err => EqualsNullSafe(err, other));
-
-		public bool Equals(ResultOk<T> resultOk) =>
-			Equals(resultOk.Value);
-
-		public bool Equals(ResultErr<E> resultErr) =>
-			Equals(resultErr.Error);
-
-		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
-			a.Equals(b);
-
-		public static bool operator !=(Result<T, E> a, Result<T, E> b) =>
-			!(a == b);
 
 		public override bool Equals(object obj) =>
 			obj switch
@@ -208,5 +170,23 @@ namespace ResultSharp
 
 		object IResult.UnwrapErrUntyped() =>
 			throw new NotImplementedException();
+
+		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
+			a.Equals(b);
+
+		public static bool operator !=(Result<T, E> a, Result<T, E> b) =>
+			!(a == b);
+
+		public static implicit operator Result<T, E>(T value) =>
+			Ok(value);
+
+		public static implicit operator Result<T, E>(E error) =>
+			Err(error);
+
+		public static implicit operator Result<T, E>(ResultOk<T> ok) =>
+			Ok(ok.Value);
+
+		public static implicit operator Result<T, E>(ResultErr<E> err) =>
+			Err(err.Error);
 	}
 }
