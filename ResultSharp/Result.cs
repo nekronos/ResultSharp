@@ -19,7 +19,7 @@ namespace ResultSharp
 			SerializationInfo info,
 			StreamingContext context)
 		{
-			Inner = (Result<Unit, string>)info.GetValue(nameof(Inner), typeof(string));
+			Inner = (Result<Unit, string>)info.GetValue(nameof(Inner), typeof(Result<Unit, string>));
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
