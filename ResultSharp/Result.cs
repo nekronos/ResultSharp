@@ -96,7 +96,9 @@ namespace ResultSharp
 			obj switch
 			{
 				Result x => Equals(x),
-				_ => Inner.Equals(obj),
+				ResultOk<Unit> x => Equals(x),
+				ResultErr<string> x => Equals(x),
+				_ => false,
 			};
 
 		public override int GetHashCode() =>

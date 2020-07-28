@@ -118,12 +118,17 @@ namespace ResultSharp
 		public override string ToString() =>
 			Inner.ToString();
 
+		public bool Equals(Result<T> other) =>
+			Inner.Equals(other.Inner);
+
 		[Pure]
 		public override bool Equals(object obj) =>
 			obj switch
 			{
 				Result<T> x => Equals(x),
-				_ => Inner.Equals(obj),
+				ResultOk<T> x => Equals(x),
+				ResultErr<string> x => Equals(x),
+				_ => false,
 			};
 
 		[Pure]
@@ -132,8 +137,5 @@ namespace ResultSharp
 
 		object IResult.UnwrapErrUntyped() =>
 			UnwrapErr();
-
-		public bool Equals(Result<T> other) =>
-			Inner.Equals(other.Inner);
 	}
 }
