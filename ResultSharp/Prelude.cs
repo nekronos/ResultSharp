@@ -4,8 +4,8 @@ namespace ResultSharp
 {
 	public static class Prelude
 	{
-		public static Result Ok() =>
-			Result.Ok();
+		public static ResultOk<Unit> Ok() =>
+			new ResultOk<Unit>(Unit.Default);
 
 		public static ResultOk<T> Ok<T>(T value) =>
 			new ResultOk<T>(value);
