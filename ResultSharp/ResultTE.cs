@@ -56,7 +56,6 @@ namespace ResultSharp
 			}
 		}
 
-		[Pure]
 		public void GetObjectData(
 			SerializationInfo info,
 			StreamingContext context)
@@ -74,95 +73,75 @@ namespace ResultSharp
 			}
 		}
 
-		[Pure]
 		public bool IsOk =>
 			State == ResultState.Ok;
 
-		[Pure]
 		public bool IsErr =>
 			State == ResultState.Err;
 
-		[Pure]
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<E, Ret> err) =>
 			IsOk
 				? ok(Value)
 				: err(Error);
 
-		[Pure]
 		public Result<U, E> Map<U>(Func<T, U> op) =>
 			Match<Result<U, E>>(val => op(val), err => err);
 
-		[Pure]
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
 			Match<Result<T, F>>(val => val, err => op(err));
 
-		[Pure]
 		public Result<U, E> And<U>(Result<U, E> result) =>
 			Match(_ => result, err => err);
 
-		[Pure]
 		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
 			Match(val => op(val), err => err);
 
-		[Pure]
 		public Result<T, F> Or<F>(Result<T, F> result) =>
 			Match(val => val, _ => result);
 
-		[Pure]
 		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
 			Match(val => val, err => op(err));
 
-		[Pure]
 		public T Unwrap() =>
 			Match(
 				val => val,
 				_ => throw new UnwrapException(Messages.UnwrapCalledOnAFaultedResult));
 
-		[Pure]
 		public T UnwrapOr(T defaultValue) =>
 			Match(val => val, _ => defaultValue);
 
-		[Pure]
 		public T UnwrapOrElse(Func<T> op) =>
 			Match(val => val, _ => op());
 
-		[Pure]
 		public E UnwrapErr() =>
 			Match(
 				_ => throw new UnwrapException(Messages.UnwrapErrCalledOnAnOkResult),
 				err => err);
 
-		[Pure]
 		public T Expect(string msg) =>
 			Match(
 				val => val,
 				_ => throw new ExpectException(msg));
 
-		[Pure]
 		public E ExpectErr(string msg) =>
 			Match(
 				_ => throw new ExpectException(msg),
 				err => err);
 
-		[Pure]
 		static string ToStringNullSafe<U>(U val) =>
 			val?.ToString() ?? "null";
 
-		[Pure]
 		public override string ToString() =>
 			Match(
 				val => $"Ok({ToStringNullSafe(val)})",
 				err => $"Err({ToStringNullSafe(err)})");
 
-		[Pure]
 		public static Result<T, E> Ok(T value) =>
 			new Result<T, E>(value);
 
-		[Pure]
 		public static Result<T, E> Err(E error) =>
 			new Result<T, E>(error);
 
-		[Pure]
 		public static Result<T, E> OkIf(
 			bool condition,
 			T value,
@@ -170,7 +149,6 @@ namespace ResultSharp
 				? Ok(value)
 				: Err(error);
 
-		[Pure]
 		public static Result<T, E> OkIf(
 			bool condition,
 			Func<T> getValue,
@@ -178,54 +156,42 @@ namespace ResultSharp
 				? Ok(getValue())
 				: Err(getError());
 
-		[Pure]
 		public static implicit operator Result<T, E>(T value) =>
 			Ok(value);
 
-		[Pure]
 		public static implicit operator Result<T, E>(E error) =>
 			Err(error);
 
-		[Pure]
 		public static implicit operator Result<T, E>(ResultOk<T> ok) =>
 			Ok(ok.Value);
 
-		[Pure]
 		public static implicit operator Result<T, E>(ResultErr<E> err) =>
 			Err(err.Error);
 
 		static bool EqualsNullSafe<U>(U a, U b) =>
 			a?.Equals(b) ?? b == null;
 
-		[Pure]
 		public bool Equals(Result<T, E> other) =>
 			other.Match(Equals, Equals);
 
-		[Pure]
 		public bool Equals(T other) =>
 			Match(val => EqualsNullSafe(val, other), _ => false);
 
-		[Pure]
 		public bool Equals(E other) =>
 			Match(_ => false, err => EqualsNullSafe(err, other));
 
-		[Pure]
 		public bool Equals(ResultOk<T> resultOk) =>
 			Equals(resultOk.Value);
 
-		[Pure]
 		public bool Equals(ResultErr<E> resultErr) =>
 			Equals(resultErr.Error);
 
-		[Pure]
 		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
 			a.Equals(b);
 
-		[Pure]
 		public static bool operator !=(Result<T, E> a, Result<T, E> b) =>
 			!(a == b);
 
-		[Pure]
 		public override bool Equals(object obj) =>
 			obj switch
 			{
@@ -235,7 +201,6 @@ namespace ResultSharp
 				_ => false,
 			};
 
-		[Pure]
 		public override int GetHashCode() =>
 			Match(
 				val => HashCode.Combine(ResultState.Ok, val),

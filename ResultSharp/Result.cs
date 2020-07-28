@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
 namespace ResultSharp
@@ -50,39 +49,30 @@ namespace ResultSharp
 
 		public bool IsErr => Inner.IsErr;
 
-		[Pure]
 		public Result<T> Map<T>(Func<T> op) =>
 			Inner.Map(_ => op());
 
-		[Pure]
 		public TRet Match<TRet>(Func<TRet> ok, Func<string, TRet> err) =>
 			Inner.Match(_ => ok(), err);
 
-		[Pure]
 		public Result And(Result result) =>
 			Inner.And(result.Inner);
 
-		[Pure]
 		public Result AndThen(Func<Result> op) =>
 			Inner.AndThen<Unit>(_ => op());
 
-		[Pure]
 		public Result Or(Result result) =>
 			Inner.Or(result.Inner);
 
-		[Pure]
 		public void Unwrap() =>
 			Inner.Unwrap();
 
-		[Pure]
 		public string UnwrapErr() =>
 			Inner.UnwrapErr();
 
-		[Pure]
 		public void Expect(string msg) =>
 			Inner.Expect(msg);
 
-		[Pure]
 		public string ExpectErr(string msg) =>
 			Inner.ExpectErr(msg);
 
