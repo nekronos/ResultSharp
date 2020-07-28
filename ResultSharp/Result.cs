@@ -55,6 +55,10 @@ namespace ResultSharp
 			Inner.Map(_ => op());
 
 		[Pure]
+		public TRet Match<TRet>(Func<TRet> ok, Func<string, TRet> err) =>
+			Inner.Match(_ => ok(), err);
+
+		[Pure]
 		public Result And(Result result) =>
 			Inner.And(result.Inner);
 
