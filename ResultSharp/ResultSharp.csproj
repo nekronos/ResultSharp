@@ -10,7 +10,7 @@
 	<PropertyGroup>
 		<PackageId>ResultSharp</PackageId>
 		<Title>ResultSharp</Title>
-		<PackageVersion>0.1.8</PackageVersion>
+		<PackageVersion>0.1.9</PackageVersion>
 		<Authors>Vegard Strand Lende</Authors>
 		<Summary>Result monad for C#</Summary>
 		<PackageTags>C#, Functional, Monad, Pattern Matching, Result, Error handling</PackageTags>
