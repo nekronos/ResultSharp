@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ResultSharp
 {
 	[Serializable]
-	public readonly struct Result :
+	public readonly partial struct Result :
 		ISerializable,
 		IEquatable<Result>,
 		IResult
