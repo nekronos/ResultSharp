@@ -40,7 +40,7 @@ namespace ResultSharp
 		public Result<U> Map<U>(Func<T, U> op) =>
 			Inner.Map(op);
 
-		public Result<T> MapErr<E>(Func<string, string> op) =>
+		public Result<T> MapErr(Func<string, string> op) =>
 			Inner.MapErr(op);
 
 		public Result<T, E> MapErr<E>(Func<string, E> op) =>
