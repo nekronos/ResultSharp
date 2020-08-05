@@ -162,6 +162,28 @@ namespace ResultSharp.Tests
 		}
 
 		[Fact]
+		public void BiMap_OkResult_ShouldReturnOkMappedResult()
+		{
+			Result<int, string> result = Ok(10);
+
+			var expected = Ok(20);
+			var actual = result.BiMap(val => val * 2, _ => "Unexpected");
+
+			actual.Should().BeEquivalentTo(expected);
+		}
+
+		[Fact]
+		public void BiMap_FaultedResult_ShouldReturnMappedFaultedResult()
+		{
+			Result<int, string> result = Err("foo");
+
+			var expected = Err("foobar");
+			var actual = result.BiMap(val => "Unexpected", err => err + "bar");
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
 		public void MapErr_FaultedResult_ShouldReturnFaultedResultWithMappedError()
 		{
 			Result<string, int> result = Err(0);

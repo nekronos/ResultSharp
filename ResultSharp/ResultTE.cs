@@ -89,6 +89,9 @@ namespace ResultSharp
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
 			Match<Result<T, F>>(val => val, err => op(err));
 
+		public Result<U, F> BiMap<U, F>(Func<T, U> okOp, Func<E, F> errOp) =>
+			Match<Result<U, F>>(val => okOp(val), err => errOp(err));
+
 		public Result<U, E> And<U>(Result<U, E> result) =>
 			Match(_ => result, err => err);
 

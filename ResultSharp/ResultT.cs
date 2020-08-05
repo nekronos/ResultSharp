@@ -39,6 +39,12 @@ namespace ResultSharp
 		public Result<U> Map<U>(Func<T, U> op) =>
 			Inner.Map(op);
 
+		public Result<U> BiMap<U>(Func<T, U> okOp, Func<string, string> errOp) =>
+			Inner.BiMap(okOp, errOp);
+
+		public Result<U, E> BiMap<U, E>(Func<T, U> okOp, Func<string, E> errOp) =>
+			Inner.BiMap(okOp, errOp);
+
 		public Result<T> MapErr(Func<string, string> op) =>
 			Inner.MapErr(op);
 
