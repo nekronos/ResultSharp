@@ -13,8 +13,7 @@ namespace ResultSharp
 	[Serializable]
 	public readonly struct Result<T, E> :
 		ISerializable,
-		IEquatable<Result<T, E>>,
-		IResult
+		IEquatable<Result<T, E>>
 	{
 		readonly ResultState State;
 		readonly T Value;
@@ -167,9 +166,6 @@ namespace ResultSharp
 			Match(
 				val => HashCode.Combine(ResultState.Ok, val),
 				err => HashCode.Combine(ResultState.Err, err));
-
-		object IResult.UnwrapErrUntyped() =>
-			throw new NotImplementedException();
 
 		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
 			a.Equals(b);

@@ -6,8 +6,7 @@ namespace ResultSharp
 	[Serializable]
 	public readonly partial struct Result :
 		ISerializable,
-		IEquatable<Result>,
-		IResult
+		IEquatable<Result>
 	{
 		internal readonly Result<Unit, string> Inner;
 
@@ -83,9 +82,6 @@ namespace ResultSharp
 
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
-
-		object IResult.UnwrapErrUntyped() =>
-			UnwrapErr();
 
 		public static implicit operator Result(ResultOk<Unit> _) =>
 			DefaultOk;
