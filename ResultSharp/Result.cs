@@ -9,7 +9,7 @@ namespace ResultSharp
 		IEquatable<Result>,
 		IResult
 	{
-		readonly Result<Unit, string> Inner;
+		internal readonly Result<Unit, string> Inner;
 
 		Result(Result<Unit, string> inner) =>
 			Inner = inner;
