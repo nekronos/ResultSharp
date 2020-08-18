@@ -72,6 +72,10 @@ namespace ResultSharp
 			where E : Exception =>
 			result
 				.AndThen(x => Try<U, E>(() => f(x)));
+
+		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
+			result
+				.Match(val => op(val), err => err);
 	}
 
 	internal static class EnumerableExtensions
