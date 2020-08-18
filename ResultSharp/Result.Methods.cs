@@ -36,5 +36,9 @@ namespace ResultSharp
 			OkIf<T, string>(condition, val, err);
 		public static Result<T> ErrIf<T>(bool condition, T val, string err) =>
 			ErrIf<T, string>(condition, val, err);
+		public static Result OkIf(bool condition, string err) =>
+			OkIf(condition, Unit.Default, err);
+		public static Result ErrIf(bool condition, string err) =>
+			OkIf(!condition, err);
 	}
 }

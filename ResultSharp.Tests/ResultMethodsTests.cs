@@ -44,5 +44,23 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void OkIf_TrueConditionWithoutOkValue_ReturnsOkResult()
+		{
+			var expected = Result.Ok();
+			var actual = Result.OkIf(true, "foo");
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void ErrIf_TrueConditionWithoutOkValue_ReturnsFaultedResult()
+		{
+			var expected = Result.Err("foo");
+			var actual = Result.ErrIf(true, "foo");
+
+			actual.Should().Be(expected);
+		}
 	}
 }

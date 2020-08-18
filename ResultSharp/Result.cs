@@ -94,5 +94,8 @@ namespace ResultSharp
 
 		public static implicit operator Result<Unit, string>(Result result) =>
 			result.Inner;
+
+		public static implicit operator Result(Result<Unit> result) =>
+			result.Inner;
 	}
 }
