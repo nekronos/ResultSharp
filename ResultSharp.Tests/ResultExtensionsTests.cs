@@ -89,5 +89,41 @@ namespace ResultSharp.Tests
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void AndThen_ResultTWithResultTE_ReturnsErr()
+		{
+			Result<int> a = Ok(10);
+			Result<int, string> b = Err("foo");
+
+			Result<int> expected = Err("foo");
+			var actual = a.AndThen(x => b);
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void AndThen_ResultTEWithResultT_ReturnsErr()
+		{
+			Result<int, string> a = Err("foo");
+			Result<char> b = Ok('1');
+
+			Result<char> expected = Err("foo");
+			var actual = a.AndThen(_ => b);
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void AndThen_ResultTEWithResult_ReturnsOk()
+		{
+			Result<int, string> a = Ok(10);
+			Result b = Ok();
+
+			Result expected = Ok();
+			var actual = a.AndThen(_ => b);
+
+			actual.Should().Be(expected);
+		}
 	}
 }

@@ -60,9 +60,6 @@ namespace ResultSharp
 		public Result<U> AndThen<U>(Func<T, Result<U>> op) =>
 			Inner.AndThen<U>(x => op(x));
 
-		public Result<U> AndThen<U>(Func<T, Result<U, string>> op) =>
-			Inner.AndThen(x => op(x));
-
 		public Result<T> Or(Result<T> result) =>
 			Inner.Or(result.Inner);
 
