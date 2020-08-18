@@ -33,8 +33,8 @@ namespace ResultSharp
 		public static Result<T, E> ErrIf<T, E>(bool condition, T val, E err) =>
 			OkIf(!condition, val, err);
 		public static Result<T> OkIf<T>(bool condition, T val, string err) =>
-			OkIf(condition, val, err);
+			OkIf<T, string>(condition, val, err);
 		public static Result<T> ErrIf<T>(bool condition, T val, string err) =>
-			ErrIf(condition, val, err);
+			ErrIf<T, string>(condition, val, err);
 	}
 }
