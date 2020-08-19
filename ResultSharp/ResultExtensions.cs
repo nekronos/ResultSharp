@@ -73,10 +73,6 @@ namespace ResultSharp
 			result
 				.AndThen(x => Try<U, E>(() => f(x)));
 
-		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
-			result
-				.Match(val => op(val), err => err);
-
 		public static Result<T> AndThen<T>(this Result result, Func<Result<T>> op) =>
 			result
 				.Match(op, err => err);
@@ -88,9 +84,14 @@ namespace ResultSharp
 		public static Result AndThen<T>(this Result<T> result, Func<T, Result> op) =>
 			result
 				.Match(op, Result.Err);
+
 		public static Result<U> AndThen<T, U>(this Result<T> result, Func<T, Result<U, string>> op) =>
 			result
 				.Match(op, err => err);
+
+		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
+			result
+				.Match(val => op(val), err => err);
 
 		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> op) =>
 			result
