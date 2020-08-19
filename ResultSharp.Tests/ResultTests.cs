@@ -434,5 +434,37 @@ namespace ResultSharp.Tests
 
 			result.Equals(null).Should().BeTrue();
 		}
+
+		[Fact]
+		public void Match_OnOkResultWithoutReturnValues_SetsValue()
+		{
+			Result<int, string> result = Ok(1);
+
+			int? actual = null;
+			var expected = 1;
+
+			result.Match(
+				val => actual = val,
+				_ => throw new Exception()
+			);
+
+			actual.Should().Be(expected);
+		}
+
+		[Fact]
+		public void Match_OnFaultedREsultWithoutReturnValues_SetsValue()
+		{
+			Result<double, string> result = Err("foo");
+
+			string? actual = null;
+			var expected = "foo";
+
+			result.Match(
+				_ => throw new Exception(),
+				err => actual = err
+			);
+
+			actual.Should().Be(expected);
+		}
 	}
 }

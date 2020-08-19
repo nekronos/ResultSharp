@@ -44,6 +44,9 @@ namespace ResultSharp
 		public TRet Match<TRet>(Func<TRet> ok, Func<string, TRet> err) =>
 			Inner.Match(_ => ok(), err);
 
+		public void Match(Action ok, Action<string> err) =>
+			Inner.Match(_ => ok(), err);
+
 		public Result And(Result result) =>
 			Inner.And(result.Inner);
 

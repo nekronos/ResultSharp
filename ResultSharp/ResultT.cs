@@ -36,6 +36,9 @@ namespace ResultSharp
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
 			Inner.Match(ok, err);
 
+		public void Match(Action<T> ok, Action<string> err) =>
+			Inner.Match(ok, err);
+
 		public Result<U> Map<U>(Func<T, U> op) =>
 			Inner.Map(op);
 

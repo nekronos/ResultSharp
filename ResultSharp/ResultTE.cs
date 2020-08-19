@@ -83,6 +83,14 @@ namespace ResultSharp
 				? ok(Value)
 				: err(Error);
 
+		public void Match(Action<T> ok, Action<E> err)
+		{
+			if (IsOk)
+				ok(Value);
+			else
+				err(Error);
+		}
+
 		public Result<U, E> Map<U>(Func<T, U> op) =>
 			Match<Result<U, E>>(val => op(val), err => err);
 
