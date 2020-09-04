@@ -66,6 +66,9 @@ namespace ResultSharp
 		public Result<T> Or(Result<T> result) =>
 			Inner.Or(result.Inner);
 
+		public Result<T> OrElse(Func<string, Result<T>> op) =>
+			Inner.OrElse<string>(x => op(x));
+
 		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
 			Inner.OrElse(x => op(x));
 
