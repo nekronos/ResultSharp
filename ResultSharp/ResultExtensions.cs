@@ -40,6 +40,14 @@ namespace ResultSharp
 				.Select(x => x.Inner)
 				.Combine(combineErr: errs => string.Join(errorMessageSeparator, errs));
 
+		public static Result<U, E> Combine<T, U, E>(
+			this IEnumerable<Result<T>> results,
+			Func<IEnumerable<T>, U> combineOk,
+			Func<IEnumerable<string>, E> combineErr) =>
+			results
+				.Select(x => x.Inner)
+				.Combine(combineOk, combineErr);
+
 		public static Result<U, F> Combine<T, U, E, F>(
 			this IEnumerable<Result<T, E>> results,
 			Func<IEnumerable<T>, U> combineOk,
