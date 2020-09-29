@@ -6,7 +6,8 @@ namespace ResultSharp
 	[Serializable]
 	public readonly partial struct Result :
 		ISerializable,
-		IEquatable<Result>
+		IEquatable<Result>,
+		IResult
 	{
 		internal readonly Result<Unit, string> Inner;
 
@@ -38,6 +39,10 @@ namespace ResultSharp
 
 		public bool IsErr => Inner.IsErr;
 
+		public Type OkType => Inner.OkType;
+
+		public Type ErrType => Inner.ErrType;
+
 		public Result<T> Map<T>(Func<T> op) =>
 			Inner.Map(_ => op());
 
@@ -46,6 +51,9 @@ namespace ResultSharp
 
 		public void Match(Action ok, Action<string> err) =>
 			Inner.Match(_ => ok(), err);
+
+		public R MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
+			Inner.MatchUntyped(ok, err);
 
 		public Result And(Result result) =>
 			Inner.And(result.Inner);

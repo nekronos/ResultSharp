@@ -6,7 +6,8 @@ namespace ResultSharp
 	[Serializable]
 	public readonly struct Result<T> :
 		ISerializable,
-		IEquatable<Result<T>>
+		IEquatable<Result<T>>,
+		IResult
 	{
 		internal readonly Result<T, string> Inner;
 
@@ -26,6 +27,10 @@ namespace ResultSharp
 		public bool IsOk => Inner.IsOk;
 
 		public bool IsErr => Inner.IsErr;
+
+		public Type OkType => Inner.OkType;
+
+		public Type ErrType => Inner.ErrType;
 
 		public static Result<T> Ok(T value) =>
 			new Result<T>(Result<T, string>.Ok(value));
@@ -107,6 +112,9 @@ namespace ResultSharp
 
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
+
+		public R MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
+			Inner.MatchUntyped(ok, err);
 
 		public static bool operator ==(Result<T> a, Result<T> b) =>
 			a.Equals(b);

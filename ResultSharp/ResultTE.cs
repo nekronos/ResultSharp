@@ -13,7 +13,8 @@ namespace ResultSharp
 	[Serializable]
 	public readonly struct Result<T, E> :
 		ISerializable,
-		IEquatable<Result<T, E>>
+		IEquatable<Result<T, E>>,
+		IResult
 	{
 		readonly ResultState State;
 		readonly T Value;
@@ -77,6 +78,12 @@ namespace ResultSharp
 
 		public bool IsErr =>
 			State == ResultState.Err;
+
+		public Type OkType =>
+			typeof(T);
+
+		public Type ErrType =>
+			typeof(E);
 
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<E, Ret> err) =>
 			IsOk
@@ -177,6 +184,9 @@ namespace ResultSharp
 			Match(
 				val => HashCode.Combine(ResultState.Ok, val),
 				err => HashCode.Combine(ResultState.Err, err));
+
+		public R MatchUntyped<R>(Func<object?, R> okFn, Func<object?, R> errFn) =>
+			Match(val => okFn(val), err => errFn(err));
 
 		public static bool operator ==(Result<T, E> a, Result<T, E> b) =>
 			a.Equals(b);
