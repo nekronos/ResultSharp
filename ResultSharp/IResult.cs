@@ -13,5 +13,8 @@ namespace ResultSharp
 		bool IsErr { get; }
 
 		R MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err);
+
+		object? UnwrapUntyped();
+		object? UnwrapErrUntyped();
 	}
 }

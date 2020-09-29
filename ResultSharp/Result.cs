@@ -64,7 +64,7 @@ namespace ResultSharp
 		public Result Or(Result result) =>
 			Inner.Or(result.Inner);
 
-		public void Unwrap() =>
+		public Unit Unwrap() =>
 			Inner.Unwrap();
 
 		public string UnwrapErr() =>
@@ -93,6 +93,12 @@ namespace ResultSharp
 
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
+
+		object? IResult.UnwrapUntyped() =>
+			Unwrap();
+
+		object? IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
 
 		public static implicit operator Result(ResultOk<Unit> _) =>
 			DefaultOk;

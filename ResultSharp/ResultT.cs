@@ -116,6 +116,12 @@ namespace ResultSharp
 		public R MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
 			Inner.MatchUntyped(ok, err);
 
+		object? IResult.UnwrapUntyped() =>
+			Unwrap();
+
+		object? IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
+
 		public static bool operator ==(Result<T> a, Result<T> b) =>
 			a.Equals(b);
 
