@@ -33,10 +33,10 @@ namespace ResultSharp
 		public Type ErrType => Inner.ErrType;
 
 		public static Result<T> Ok(T value) =>
-			new Result<T>(Result<T, string>.Ok(value));
+			Result<T, string>.Ok(value);
 
 		public static Result<T> Err(string error) =>
-			new Result<T>(Result<T, string>.Err(error));
+			Result<T, string>.Err(error);
 
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
 			Inner.Match(ok, err);

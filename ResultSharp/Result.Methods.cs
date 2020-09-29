@@ -6,20 +6,20 @@ namespace ResultSharp
 {
 	public readonly partial struct Result
 	{
-		public static Result<T, E> Ok<T, E>(T val) => val;
-		public static Result<T, E> Err<T, E>(E err) => err;
-		public static Result<T> Ok<T>(T val) => val;
-		public static Result<T> Err<T>(string err) => err;
+		public static Result<T, E> Ok<T, E>(T val) => Result<T, E>.Ok(val);
+		public static Result<T, E> Err<T, E>(E err) => Result<T, E>.Err(err);
+		public static Result<T> Ok<T>(T val) => Result<T>.Ok(val);
+		public static Result<T> Err<T>(string err) => Result<T>.Err(err);
 		public static Result<T, E> Try<T, E>(Func<T> fn) where E : Exception
 		{
 			try
 			{
 				var val = fn();
-				return val;
+				return Result<T, E>.Ok(val);
 			}
 			catch (E exception)
 			{
-				return exception;
+				return Result<T, E>.Err(exception);
 			}
 		}
 		public static Result<T, Exception> Try<T>(Func<T> fn) =>
@@ -27,8 +27,8 @@ namespace ResultSharp
 		public static Result<T, E> OkIf<T, E>(bool condition, T val, E err) =>
 			condition switch
 			{
-				true => val,
-				false => err,
+				true => Result<T,E>.Ok(val),
+				false => Result<T, E>.Err(err),
 			};
 		public static Result<T, E> ErrIf<T, E>(bool condition, T val, E err) =>
 			OkIf(!condition, val, err);
