@@ -68,11 +68,17 @@ namespace ResultSharp
 		public Result<U> AndThen<U>(Func<T, Result<U>> op) =>
 			Inner.AndThen<U>(x => op(x));
 
+		public Result<U> AndThen<U>(Func<T, Result<U, string>> op) =>
+			Inner.AndThen<U>(x => op(x));
+
 		public Result<T> Or(Result<T> result) =>
 			Inner.Or(result.Inner);
 
 		public Result<T> OrElse(Func<string, Result<T>> op) =>
 			Inner.OrElse<string>(x => op(x));
+
+		public Result<T> OrElse(Func<string, Result<T, string>> op) =>
+			Inner.OrElse(x => op(x));
 
 		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
 			Inner.OrElse(x => op(x));
