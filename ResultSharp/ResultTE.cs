@@ -99,25 +99,28 @@ namespace ResultSharp
 		}
 
 		public Result<U, E> Map<U>(Func<T, U> op) =>
-			Match<Result<U, E>>(val => op(val), err => err);
+			BiMap(val => op(val), err => err);
 
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
-			Match<Result<T, F>>(val => val, err => op(err));
+			BiMap(val => val, err => op(err));
 
 		public Result<U, F> BiMap<U, F>(Func<T, U> okOp, Func<E, F> errOp) =>
-			Match<Result<U, F>>(val => okOp(val), err => errOp(err));
+			Match(
+				val => Result.Ok<U, F>(okOp(val)),
+				err => Result.Err<U, F>(errOp(err))
+			);
 
 		public Result<U, E> And<U>(Result<U, E> result) =>
-			Match(_ => result, err => err);
+			Match(_ => result, Result.Err<U, E>);
 
 		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
-			Match(val => op(val), err => err);
+			Match(val => op(val), Result.Err<U, E>);
 
 		public Result<T, F> Or<F>(Result<T, F> result) =>
-			Match(val => val, _ => result);
+			Match(Result.Ok<T, F>, _ => result);
 
 		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
-			Match(val => val, err => op(err));
+			Match(Result.Ok<T, F>, err => op(err));
 
 		public T Unwrap() =>
 			Match(
@@ -199,12 +202,6 @@ namespace ResultSharp
 
 		public static bool operator !=(Result<T, E> a, Result<T, E> b) =>
 			!(a == b);
-
-		public static implicit operator Result<T, E>(T value) =>
-			Ok(value);
-
-		public static implicit operator Result<T, E>(E error) =>
-			Err(error);
 
 		public static implicit operator Result<T, E>(ResultOk<T> ok) =>
 			Ok(ok.Value);

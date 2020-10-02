@@ -26,14 +26,11 @@ namespace ResultSharp
 			StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
-		static readonly Result DefaultOk =
-			new Result(Unit.Default);
-
 		public static Result Ok() =>
-			DefaultOk;
+			new Result(Ok<Unit, string>(Unit.Default));
 
 		public static Result Err(string error) =>
-			new Result(error);
+			new Result(Err<Unit, string>(error));
 
 		public bool IsOk => Inner.IsOk;
 
@@ -110,7 +107,7 @@ namespace ResultSharp
 			UnwrapErr();
 
 		public static implicit operator Result(ResultOk<Unit> _) =>
-			DefaultOk;
+			Ok();
 
 		public static implicit operator Result(ResultErr<string> resultErr) =>
 			Err(resultErr.Error);

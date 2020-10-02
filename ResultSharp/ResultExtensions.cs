@@ -87,11 +87,11 @@ namespace ResultSharp
 
 		public static Result<U> And<T, U>(this Result<T, string> result, Result<U> other) =>
 			result
-				.Match(_ => other, err => err);
+				.Match(_ => other, Result.Err<U>);
 
 		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
 			result
-				.Match(val => op(val), err => err);
+				.Match(val => op(val), Result.Err<U>);
 
 		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> op) =>
 			result

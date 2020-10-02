@@ -134,12 +134,6 @@ namespace ResultSharp
 		public static bool operator !=(Result<T> a, Result<T> b) =>
 			!(a == b);
 
-		public static implicit operator Result<T>(T value) =>
-			Ok(value);
-
-		public static implicit operator Result<T>(string error) =>
-			Err(error);
-
 		public static implicit operator Result<T>(ResultOk<T> resultOk) =>
 			new Result<T>(resultOk);
 
