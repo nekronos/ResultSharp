@@ -24,7 +24,12 @@ namespace ResultSharp
 		public static Result OkIf(
 			bool condition,
 			string error) =>
-				OkIf(condition, new Unit(), error);
+				OkIf(condition, Unit.Default, error);
+
+		public static Result OkIf(
+			bool condition,
+			Func<string> getError) =>
+				OkIf(condition, () => Unit.Default, getError);
 
 		public static Result<T, E> ErrIf<T, E>(bool condition, T value, E error) =>
 			Result.ErrIf(condition, value, error);
@@ -38,7 +43,12 @@ namespace ResultSharp
 		public static Result ErrIf(
 			bool condition,
 			string error) =>
-			ErrIf(condition, new Unit(), error);
+			ErrIf(condition, Unit.Default, error);
+
+		public static Result ErrIf(
+			bool condition,
+			Func<string> getError) =>
+			ErrIf(condition, () => Unit.Default, getError);
 
 		public static Result<T, Exception> Try<T>(Func<T> op) =>
 			Result.Try(op);
