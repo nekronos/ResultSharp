@@ -12,14 +12,21 @@ namespace ResultSharp
 			this IEnumerable<Result<T, E>> results)
 		{
 			var data = results as Result<T, E>[] ?? results.ToArray();
-			var errors = data.Where(x => x.IsErr);
+			var errors = data
+				.Where(x => x.IsErr)
+				.Select(x => x.UnwrapErr())
+				.ToArray();
 			if (errors.Any())
 			{
-				return Err(errors.Select(x => x.UnwrapErr()));
+				return Err(errors.AsEnumerable());
 			}
 			else
 			{
-				return Ok(data.Select(x => x.Unwrap()));
+				var oks = data
+					.Select(x => x.Unwrap())
+					.ToArray()
+					.AsEnumerable();
+				return Ok(oks);
 			}
 		}
 
