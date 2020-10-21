@@ -125,7 +125,8 @@ namespace ResultSharp
 		public T Unwrap() =>
 			Match(
 				val => val,
-				_ => throw new UnwrapException(Messages.UnwrapCalledOnAFaultedResult));
+				err => throw new UnwrapException($"{Messages.UnwrapCalledOnAFaultedResult}: '{ToStringNullSafe(err)}'")
+			);
 
 		public T UnwrapOr(T defaultValue) =>
 			Match(val => val, _ => defaultValue);
@@ -135,8 +136,9 @@ namespace ResultSharp
 
 		public E UnwrapErr() =>
 			Match(
-				_ => throw new UnwrapException(Messages.UnwrapErrCalledOnAnOkResult),
-				err => err);
+				val => throw new UnwrapException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(val)}'"),
+				err => err
+			);
 
 		public T Expect(string msg) =>
 			Match(
