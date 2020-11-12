@@ -143,12 +143,14 @@ namespace ResultSharp
 		public T Expect(string msg) =>
 			Match(
 				val => val,
-				_ => throw new ExpectException(msg));
+				_ => throw new ExpectException(msg)
+			);
 
 		public E ExpectErr(string msg) =>
 			Match(
 				_ => throw new ExpectException(msg),
-				err => err);
+				err => err
+			);
 
 		static string ToStringNullSafe<U>(U val) =>
 			val?.ToString() ?? "null";
@@ -156,7 +158,8 @@ namespace ResultSharp
 		public override string ToString() =>
 			Match(
 				val => $"Ok({ToStringNullSafe(val)})",
-				err => $"Err({ToStringNullSafe(err)})");
+				err => $"Err({ToStringNullSafe(err)})"
+			);
 
 		public static Result<T, E> Ok(T value) =>
 			new Result<T, E>(value);
@@ -164,17 +167,23 @@ namespace ResultSharp
 		public static Result<T, E> Err(E error) =>
 			new Result<T, E>(error);
 
-		static bool EqualsNullSafe<U>(U a, U b) =>
-			a?.Equals(b) ?? b == null;
-
 		public bool Equals(Result<T, E> other) =>
 			other.Match(Equals, Equals);
 
-		public bool Equals(T other) =>
-			Match(val => EqualsNullSafe(val, other), _ => false);
+		static bool EqualsNullSafe<U>(U a, U b) =>
+			a?.Equals(b) ?? b == null;
 
-		public bool Equals(E other) =>
-			Match(_ => false, err => EqualsNullSafe(err, other));
+		bool Equals(T other) =>
+			Match(
+				val => EqualsNullSafe(val, other),
+				_ => false
+			);
+
+		bool Equals(E other) =>
+			Match(
+				_ => false,
+				err => EqualsNullSafe(err, other)
+			);
 
 		public override bool Equals(object obj) =>
 			obj switch

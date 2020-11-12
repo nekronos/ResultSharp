@@ -13,8 +13,16 @@ namespace ResultSharp
 		public static ResultErr<E> Err<E>(E error) =>
 			new ResultErr<E>(error);
 
+		public static Result<T> OkIf<T>(bool condition, T Value, string error) =>
+			Result.OkIf(condition, Value, error);
+
 		public static Result<T, E> OkIf<T, E>(bool condition, T value, E error) =>
 			Result.OkIf(condition, value, error);
+
+		public static Result<T> OkIf<T>(bool condition, Func<T> getValue, Func<string> getError) =>
+			condition
+				? Result<T>.Ok(getValue())
+				: Result<T>.Err(getError());
 
 		public static Result<T, E> OkIf<T, E>(bool condition, Func<T> getValue, Func<E> getError) =>
 			condition
@@ -31,6 +39,9 @@ namespace ResultSharp
 			Func<string> getError) =>
 				OkIf(condition, () => Unit.Default, getError);
 
+		public static Result<T> ErrIf<T>(bool condition, T value, string error) =>
+			Result.ErrIf(condition, value, error);
+
 		public static Result<T, E> ErrIf<T, E>(bool condition, T value, E error) =>
 			Result.ErrIf(condition, value, error);
 
@@ -38,6 +49,12 @@ namespace ResultSharp
 			bool condition,
 			Func<T> getValue,
 			Func<E> getError) =>
+				OkIf(!condition, getValue, getError);
+
+		public static Result<T> ErrIf<T>(
+			bool condition,
+			Func<T> getValue,
+			Func<string> getError) =>
 				OkIf(!condition, getValue, getError);
 
 		public static Result ErrIf(

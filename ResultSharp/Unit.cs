@@ -14,6 +14,6 @@ namespace ResultSharp
 		public override int GetHashCode() => 0;
 		public static bool operator ==(Unit a, Unit b) => true;
 		public static bool operator !=(Unit a, Unit b) => false;
-		public static Unit Default { get; } = new Unit();
+		public static Unit Default { get; } = default;
 	}
 }

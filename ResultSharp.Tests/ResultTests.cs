@@ -424,7 +424,9 @@ namespace ResultSharp.Tests
 		{
 			Result<string?, int> result = Ok<string?>(null);
 
-			result.Equals(null).Should().BeTrue();
+			var expected = Result.Ok<string?, int>(null);
+
+			result.Should().Be(expected);
 		}
 
 		[Fact]
@@ -432,7 +434,9 @@ namespace ResultSharp.Tests
 		{
 			Result<int, int?> result = Err<int?>(null);
 
-			result.Equals(null).Should().BeTrue();
+			var expected = Result.Err<int, int?>(null);
+
+			result.Should().Be(expected);
 		}
 
 		[Fact]
