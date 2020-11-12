@@ -8,6 +8,12 @@ namespace ResultSharp
 {
 	public static class ResultExtensions
 	{
+		/// <summary>
+		/// Combines multiple results into a single result.
+		/// The combined result will be faulted if any of the inputs are faulted
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <returns>The combined Result</returns>
 		public static Result<IEnumerable<T>, IEnumerable<E>> Combine<T, E>(
 			this IEnumerable<Result<T, E>> results)
 		{
@@ -30,6 +36,14 @@ namespace ResultSharp
 			}
 		}
 
+		/// <summary>
+		/// Combines multiple results into a single result, joining the errors
+		/// with the provided <paramref name="errorMessageSeparator"/>
+		/// The combined result will be faulted if any of the inputs are faulted
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="errorMessageSeparator">The string used to join the errors</param>
+		/// <returns>The combined Result</returns>
 		public static Result Combine(
 			this IEnumerable<Result> results,
 			string errorMessageSeparator) =>
@@ -40,6 +54,14 @@ namespace ResultSharp
 					errs => string.Join(errorMessageSeparator, errs)
 				);
 
+		/// <summary>
+		/// Combines multiple results into a single result, joining the errors
+		/// with the provided <paramref name="errorMessageSeparator"/>
+		/// The combined result will be faulted if any of the inputs are faulted
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="errorMessageSeparator">The string used to join the errors</param>
+		/// <returns>The combined Result</returns>
 		public static Result<IEnumerable<T>> Combine<T>(
 			this IEnumerable<Result<T>> results,
 			string errorMessageSeparator) =>
@@ -47,6 +69,14 @@ namespace ResultSharp
 				.Select(x => x.Inner)
 				.Combine(combineErr: errs => string.Join(errorMessageSeparator, errs));
 
+		/// <summary>
+		/// Combines multiple results into a single result, combining either the
+		/// Ok values or the Err values with the provided functions.
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="combineOk">Ok combinator function</param>
+		/// <param name="combineErr">Err combinator function</param>
+		/// <returns>The combined Result</returns>
 		public static Result<U, E> Combine<T, U, E>(
 			this IEnumerable<Result<T>> results,
 			Func<IEnumerable<T>, U> combineOk,
@@ -55,6 +85,14 @@ namespace ResultSharp
 				.Select(x => x.Inner)
 				.Combine(combineOk, combineErr);
 
+		/// <summary>
+		/// Combines multiple results into a single result, combining either the
+		/// Ok values or the Err values with the provided functions.
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="combineOk">Ok combinator function</param>
+		/// <param name="combineErr">Err combinator function</param>
+		/// <returns>The combined Result</returns>
 		public static Result<U, F> Combine<T, U, E, F>(
 			this IEnumerable<Result<T, E>> results,
 			Func<IEnumerable<T>, U> combineOk,
@@ -63,6 +101,13 @@ namespace ResultSharp
 				.Combine()
 				.BiMap(combineOk, combineErr);
 
+		/// <summary>
+		/// Combines multiple results into a single result, combining the
+		/// Err values with the provided function.
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="combineErr">Err combinator function</param>
+		/// <returns>The combined Result</returns>
 		public static Result<IEnumerable<T>, F> Combine<T, E, F>(
 			this IEnumerable<Result<T, E>> results,
 			Func<IEnumerable<E>, F> combineErr) =>
@@ -70,6 +115,13 @@ namespace ResultSharp
 				.Combine()
 				.MapErr(combineErr);
 
+		/// <summary>
+		/// Combines multiple results into a single result, combining the
+		/// Ok values with the provided function.
+		/// </summary>
+		/// <param name="results">The Results to be combined</param>
+		/// <param name="combineOk">Ok combinator function</param>
+		/// <returns>The combined Result</returns>
 		public static Result<U, IEnumerable<E>> Combine<T, U, E>(
 			this IEnumerable<Result<T, E>> results,
 			Func<IEnumerable<T>, U> combineOk) =>

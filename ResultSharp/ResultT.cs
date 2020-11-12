@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace ResultSharp
@@ -24,92 +26,148 @@ namespace ResultSharp
 		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
+		[Pure]
 		public bool IsOk => Inner.IsOk;
 
+		[Pure]
 		public bool IsErr => Inner.IsErr;
 
+		[Pure]
 		public Type OkType => Inner.OkType;
 
+		[Pure]
 		public Type ErrType => Inner.ErrType;
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T> Ok(T value) =>
 			Result<T, string>.Ok(value);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T> Err(string error) =>
 			Result<T, string>.Err(error);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
 			Inner.Match(ok, err);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Match(Action<T> ok, Action<string> err) =>
 			Inner.Match(ok, err);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> Map<U>(Func<T, U> op) =>
 			Inner.Map(op);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> BiMap<U>(Func<T, U> okOp, Func<string, string> errOp) =>
 			Inner.BiMap(okOp, errOp);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> BiMap<U, E>(Func<T, U> okOp, Func<string, E> errOp) =>
 			Inner.BiMap(okOp, errOp);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T> MapErr(Func<string, string> op) =>
 			Inner.MapErr(op);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, E> MapErr<E>(Func<string, E> op) =>
 			Inner.MapErr(op);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> And<U>(Result<U> result) =>
 			Inner.And(result.Inner);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> And<U>(Result<U, string> result) =>
 			Inner.And(result);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result AndThen(Func<T, Result> op) =>
 			Inner.Match(val => op(val), Result.Err);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> AndThen<U>(Func<T, Result<U>> op) =>
 			Inner.AndThen<U>(x => op(x));
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> AndThen<U>(Func<T, Result<U, string>> op) =>
 			Inner.AndThen<U>(x => op(x));
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T> Or(Result<T> result) =>
 			Inner.Or(result.Inner);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T> OrElse(Func<string, Result<T>> op) =>
 			Inner.OrElse<string>(x => op(x));
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T> OrElse(Func<string, Result<T, string>> op) =>
 			Inner.OrElse(x => op(x));
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
 			Inner.OrElse(x => op(x));
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T Unwrap() =>
 			Inner.Unwrap();
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T UnwrapOr(T defaultValue) =>
 			Inner.UnwrapOr(defaultValue);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T UnwrapOrElse(Func<T> op) =>
 			Inner.UnwrapOrElse(op);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public string UnwrapErr() =>
 			Inner.UnwrapErr();
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T Expect(string msg) =>
 			Inner.Expect(msg);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public string ExpectErr(string msg) =>
 			Inner.ExpectErr(msg);
 
+		[Pure]
 		public override string ToString() =>
 			Inner.ToString();
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(Result<T> other) =>
 			Inner.Equals(other.Inner);
 
+		[Pure]
 		public override bool Equals(object obj) =>
 			obj switch
 			{
@@ -119,33 +177,48 @@ namespace ResultSharp
 				_ => false,
 			};
 
+		[Pure]
 		public override int GetHashCode() =>
 			Inner.GetHashCode();
 
-		public R MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
-			Inner.MatchUntyped(ok, err);
+		[Pure]
+		R IResult.MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
+			((IResult)Inner).MatchUntyped(ok, err);
 
-		object? IResult.UnwrapUntyped() =>
-			Unwrap();
+		[Pure]
+		object? IResult.UnwrapUntyped => Unwrap();
 
-		object? IResult.UnwrapErrUntyped() =>
-			UnwrapErr();
+		[Pure]
+		object? IResult.UnwrapErrUntyped => UnwrapErr();
 
-		public static bool operator ==(Result<T> a, Result<T> b) =>
-			a.Equals(b);
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool operator ==(Result<T> lhs, Result<T> rhs) =>
+			lhs.Equals(rhs);
 
-		public static bool operator !=(Result<T> a, Result<T> b) =>
-			!(a == b);
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool operator !=(Result<T> lhs, Result<T> rhs) =>
+			!(lhs == rhs);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Result<T>(ResultOk<T> resultOk) =>
 			new Result<T>(resultOk);
+
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 
 		public static implicit operator Result<T>(ResultErr<string> resultErr) =>
 			new Result<T>(resultErr);
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Result<T, string>(Result<T> result) =>
 			result.Inner;
 
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Result<T>(Result<T, string> result) =>
 			new Result<T>(result);
 	}
