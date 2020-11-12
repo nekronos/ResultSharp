@@ -5,6 +5,7 @@
 		<LangVersion>8.0</LangVersion>
 		<OutputType>library</OutputType>
 		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
