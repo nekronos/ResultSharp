@@ -191,10 +191,10 @@ namespace ResultSharp
 			((IResult)Inner).MatchUntyped(ok, err);
 
 		[Pure]
-		object? IResult.UnwrapUntyped => Unwrap();
+		object? IResult.UnwrapUntyped() => Unwrap();
 
 		[Pure]
-		object? IResult.UnwrapErrUntyped => UnwrapErr();
+		object? IResult.UnwrapErrUntyped() => UnwrapErr();
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

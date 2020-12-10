@@ -41,11 +41,11 @@ namespace ResultSharp
 		/// <summary>
 		/// Unwrap the ok value as nullable object
 		/// </summary>
-		object? UnwrapUntyped { get; }
+		object? UnwrapUntyped();
 
 		/// <summary>
 		/// Unwrap the error value as nullable object
 		/// </summary>
-		object? UnwrapErrUntyped { get; }
+		object? UnwrapErrUntyped();
 	}
 }
