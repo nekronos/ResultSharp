@@ -324,7 +324,7 @@ namespace ResultSharp.Tests
 
 			Func<string> expectErr = () => result.ExpectErr("err");
 
-			expectErr.Should().Throw<ExpectException>("because the result is ok");
+			expectErr.Should().Throw<ExpectErrException>("because the result is ok");
 		}
 
 		[Fact]
