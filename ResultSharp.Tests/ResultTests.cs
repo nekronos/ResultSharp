@@ -10,7 +10,7 @@ namespace ResultSharp.Tests
 		[Fact]
 		public void Ok_IsOk_ReturnsTrue()
 		{
-			var result = Result<int, string>.Ok(0);
+			var result = Result.Ok(0);
 
 			result.IsOk.Should().BeTrue();
 		}
@@ -18,7 +18,7 @@ namespace ResultSharp.Tests
 		[Fact]
 		public void Ok_IsErr_ReturnsFalse()
 		{
-			var result = Result<int, string>.Ok(0);
+			var result = Result.Ok(0);
 
 			result.IsErr.Should().BeFalse();
 		}
@@ -26,7 +26,7 @@ namespace ResultSharp.Tests
 		[Fact]
 		public void Err_IsOk_ReturnsFalse()
 		{
-			var result = Result<string, int>.Err(0);
+			var result = Result.Err<string, int>(0);
 
 			result.IsOk.Should().BeFalse();
 		}
@@ -34,7 +34,7 @@ namespace ResultSharp.Tests
 		[Fact]
 		public void Err_IsErr_ReturnsTrue()
 		{
-			var result = Result<string, int>.Err(0);
+			var result = Result.Err<string, int>(0);
 
 			result.IsErr.Should().BeTrue();
 		}

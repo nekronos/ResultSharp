@@ -47,8 +47,8 @@ namespace ResultSharp.Tests
 		{
 			var expected = Err(new DivideByZeroException());
 
-			var actual = Result<int, DivideByZeroException>
-				.Ok(10)
+			var actual = Result
+				.Ok<int, DivideByZeroException>(10)
 				.AndThenTry(x => TestStubs.Divide(x, 0));
 
 			actual.Should().Be(expected);
