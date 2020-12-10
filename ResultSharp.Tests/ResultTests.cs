@@ -96,7 +96,7 @@ namespace ResultSharp.Tests
 
 			Func<string> unwrapErr = result.UnwrapErr;
 
-			unwrapErr.Should().Throw<UnwrapException>("because the result is ok");
+			unwrapErr.Should().Throw<UnwrapErrException>("because the result is ok");
 		}
 
 		[Fact]
