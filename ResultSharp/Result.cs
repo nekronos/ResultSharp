@@ -5,6 +5,10 @@ using System.Runtime.Serialization;
 
 namespace ResultSharp
 {
+	/// <summary>
+	/// Union type that can be in one of two states:
+	/// Ok() or Err(string)
+	/// </summary>
 	[Serializable]
 	public readonly partial struct Result :
 		ISerializable,
@@ -23,7 +27,7 @@ namespace ResultSharp
 			Inner = (Result<Unit, string>)info.GetValue(nameof(Inner), typeof(Result<Unit, string>));
 		}
 
-		public void GetObjectData(
+		void ISerializable.GetObjectData(
 			SerializationInfo info,
 			StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);

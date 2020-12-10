@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace ResultSharp
 {
+	/// <summary>
+	/// Unit is a type that encodes the abscense of a specific value
+	/// </summary>
 	[Serializable]
 	public struct Unit :
 		IEquatable<Unit>,

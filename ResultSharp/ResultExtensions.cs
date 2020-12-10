@@ -6,6 +6,9 @@ using static ResultSharp.Prelude;
 
 namespace ResultSharp
 {
+	/// <summary>
+	/// Result extension methods
+	/// </summary>
 	public static class ResultExtensions
 	{
 		/// <summary>

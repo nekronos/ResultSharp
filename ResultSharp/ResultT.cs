@@ -5,6 +5,11 @@ using System.Runtime.Serialization;
 
 namespace ResultSharp
 {
+	/// <summary>
+	/// Union type that can be in one of two states:
+	/// Ok(<typeparamref name="T"/>) or Err(string)
+	/// </summary>
+	/// <typeparam name="T">Bound Ok value</typeparam>
 	[Serializable]
 	public readonly struct Result<T> :
 		ISerializable,
@@ -23,7 +28,7 @@ namespace ResultSharp
 			Inner = (Result<T, string>)info.GetValue(nameof(Inner), typeof(Result<T, string>));
 		}
 
-		public void GetObjectData(SerializationInfo info, StreamingContext context) =>
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
 		[Pure]
@@ -40,13 +45,13 @@ namespace ResultSharp
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Result<T> Ok(T value) =>
-			Result<T, string>.Ok(value);
+		internal static Result<T> Ok(T value) =>
+			new Result<T>(Result<T, string>.Ok(value));
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Result<T> Err(string error) =>
-			Result<T, string>.Err(error);
+		internal static Result<T> Err(string error) =>
+			new Result<T>(Result<T, string>.Err(error));
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

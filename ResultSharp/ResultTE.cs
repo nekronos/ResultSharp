@@ -11,6 +11,12 @@ namespace ResultSharp
 		Err,
 	}
 
+	/// <summary>
+	/// Union type that can be in one of two states:
+	/// Ok(<typeparamref name="T"/>) or Err(<typeparamref name="E"/>)
+	/// </summary>
+	/// <typeparam name="T">Bound Ok value</typeparam>
+	/// <typeparam name="E">Bound Err value</typeparam>
 	[Serializable]
 	public readonly struct Result<T, E> :
 		ISerializable,
@@ -57,7 +63,7 @@ namespace ResultSharp
 			}
 		}
 
-		public void GetObjectData(
+		void ISerializable.GetObjectData(
 			SerializationInfo info,
 			StreamingContext context)
 		{
@@ -73,6 +79,16 @@ namespace ResultSharp
 					break;
 			}
 		}
+
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal static Result<T, E> Ok(T value) =>
+			new Result<T, E>(value);
+
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal static Result<T, E> Err(E error) =>
+			new Result<T, E>(error);
 
 		/// <summary>
 		/// Is the Result in the Ok state
@@ -105,6 +121,7 @@ namespace ResultSharp
 		/// <summary>
 		/// Match the two states of the Result
 		/// </summary>
+		/// <typeparam name="Ret">Type of the return value</typeparam>
 		/// <param name="ok">Ok match operation</param>
 		/// <param name="err">Error match operation</param>
 		/// <returns>Ret</returns>
@@ -248,16 +265,16 @@ namespace ResultSharp
 			Match(val => val, _ => op());
 
 		/// <summary>
-		/// Returns the contained Err value, or throws UnwrapException if
+		/// Returns the contained Err value, or throws UnwrapErrException if
 		/// the Result is Ok
 		/// </summary>
-		/// <exception cref="UnwrapException">Thrown if the Result is Ok</exception>
+		/// <exception cref="UnwrapErrException">Thrown if the Result is Ok</exception>
 		/// <returns>The contained error</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public E UnwrapErr() =>
 			Match(
-				val => throw new UnwrapException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(val)}'"),
+				val => throw new UnwrapErrException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(val)}'"),
 				err => err
 			);
 
@@ -277,17 +294,17 @@ namespace ResultSharp
 			);
 
 		/// <summary>
-		/// Returns the contained Err value, or throws ExpectException if
+		/// Returns the contained Err value, or throws ExpectErrException if
 		/// the Result is Ok
 		/// </summary>
-		/// <exception cref="ExpectException">Thrown if the Result is Ok</exception>
+		/// <exception cref="ExpectErrException">Thrown if the Result is Ok</exception>
 		/// <param name="msg">error message</param>
 		/// <returns>The contained error</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public E ExpectErr(string msg) =>
 			Match(
-				_ => throw new ExpectException(msg),
+				_ => throw new ExpectErrException(msg),
 				err => err
 			);
 
@@ -303,26 +320,6 @@ namespace ResultSharp
 				val => $"Ok({ToStringNullSafe(val)})",
 				err => $"Err({ToStringNullSafe(err)})"
 			);
-
-		/// <summary>
-		/// Initialize an Ok result from the provided value
-		/// </summary>
-		/// <param name="value">The value of Ok type</param>
-		/// <returns>A Result containing the value in the Ok state</returns>
-		[Pure]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Result<T, E> Ok(T value) =>
-			new Result<T, E>(value);
-
-		/// <summary>
-		/// Initialize a faulted result from the provided value
-		/// </summary>
-		/// <param name="error">The value of Err type</param>
-		/// <returns>A Result containing the value in the Err state</returns>
-		[Pure]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Result<T, E> Err(E error) =>
-			new Result<T, E>(error);
 
 		/// <summary>
 		/// Performs Equality check on the values contained in the results.
@@ -372,7 +369,8 @@ namespace ResultSharp
 		public override int GetHashCode() =>
 			Match(
 				val => HashCode.Combine(ResultState.Ok, val),
-				err => HashCode.Combine(ResultState.Err, err));
+				err => HashCode.Combine(ResultState.Err, err)
+			);
 
 		[Pure]
 		R IResult.MatchUntyped<R>(Func<object?, R> okFn, Func<object?, R> errFn) =>

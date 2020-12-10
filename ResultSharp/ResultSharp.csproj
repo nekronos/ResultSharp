@@ -6,6 +6,7 @@
 		<OutputType>library</OutputType>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup>
