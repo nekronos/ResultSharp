@@ -255,7 +255,7 @@ namespace ResultSharp
 			Match(val => val, _ => defaultValue);
 
 		/// <summary>
-		/// Returns the contained Ok value, or computes if from the delegate provided
+		/// Returns the contained Ok value, or computes it from the provided delegate
 		/// </summary>
 		/// <param name="op">operation</param>
 		/// <returns>The contained or computed value</returns>
