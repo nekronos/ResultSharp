@@ -90,6 +90,16 @@ namespace ResultSharp.Tests
 		}
 
 		[Fact]
+		public void UnwrapOrElse_FaultedResult_ShouldReturnValueFromClosureBasedOnError()
+		{
+			Result<string, string> result = Err("err");
+
+			var actual = result.UnwrapOrElse(err => $"computed {err}");
+
+			actual.Should().Be("computed err");
+		}
+
+		[Fact]
 		public void UnwrapErr_OkResult_ShouldThrow()
 		{
 			Result<int, string> result = Ok(0);

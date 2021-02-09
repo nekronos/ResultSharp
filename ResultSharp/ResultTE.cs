@@ -265,6 +265,16 @@ namespace ResultSharp
 			Match(val => val, _ => op());
 
 		/// <summary>
+		/// Returns the contained Ok value, or computes it from the error value using the provided delegate
+		/// </summary>
+		/// <param name="op">operation</param>
+		/// <returns>The contained or computed value</returns>
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public T UnwrapOrElse(Func<E, T> op) =>
+			Match(val => val, op);
+
+		/// <summary>
 		/// Returns the contained Err value, or throws UnwrapErrException if
 		/// the Result is Ok
 		/// </summary>

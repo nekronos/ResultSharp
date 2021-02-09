@@ -150,6 +150,11 @@ namespace ResultSharp
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public T UnwrapOrElse(Func<string, T> op) =>
+			Inner.UnwrapOrElse(op);
+
+		[Pure]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public string UnwrapErr() =>
 			Inner.UnwrapErr();
 
