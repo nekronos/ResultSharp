@@ -6,45 +6,31 @@ namespace ResultSharp
 	{
 		#region Result<T, E>
 
-		public static Result<TResult, TErr> SelectMany<TSource, TCollection, TResult, TErr>(
-			this Result<TSource, TErr> result,
-			Func<TSource, Result<TCollection, TErr>> collectionSelector,
-			Func<TSource, TCollection, TResult> resultSelector
-		) =>
-			result.AndThen(a => collectionSelector(a).Map(b => resultSelector(a, b)));
+		public static Result<V, E> SelectMany<T, U, V, E>(
+			this Result<T, E> result,
+			Func<T, Result<U, E>> bind,
+			Func<T, U, V> project) =>
+			result.AndThen(a => bind(a).Map(b => project(a, b)));
 
-		public static Result<TResult, TErr> SelectMany<TSource, TResult, TErr>(
-			this Result<TSource, TErr> result,
-			Func<TSource, Result<TResult, TErr>> selector
-		) => result.AndThen(selector);
+		public static Result<U, E> SelectMany<T, U, E>(this Result<T, E> result, Func<T, Result<U, E>> bind) => result.AndThen(bind);
 
-		public static Result<TResult, TErr> Select<TSource, TResult, TErr>(
-			this Result<TSource, TErr> result,
-			Func<TSource, TResult> selector
-		) => result.Map(selector);
+		public static Result<U, E> Select<T, U, E>(this Result<T, E> result, Func<T, U> project) => result.Map(project);
 
 		#endregion
 
-
-
 		#region Result<T>
 
-		public static Result<TResult> SelectMany<TSource, TCollection, TResult>(
-			this Result<TSource> result,
-			Func<TSource, Result<TCollection>> collectionSelector,
-			Func<TSource, TCollection, TResult> resultSelector
-		) =>
-			result.AndThen(a => collectionSelector(a).Map(b => resultSelector(a, b)));
+		public static Result<V> SelectMany<T, U, V>(
+			this Result<T> result,
+			Func<T, Result<U>> bind,
+			Func<T, U, V> project) =>
+			result.AndThen(a => bind(a).Map(b => project(a, b)));
 
-		public static Result<TResult> SelectMany<TSource, TResult>(
-			this Result<TSource> result,
-			Func<TSource, Result<TResult>> selector
-		) => result.AndThen(selector);
+		public static Result<U> SelectMany<T, U>(this Result<T> result, Func<T, Result<U>> bind) =>
+			result.AndThen(bind);
 
-		public static Result<TResult> Select<TSource, TResult>(
-			this Result<TSource> result,
-			Func<TSource, TResult> selector
-		) => result.Map(selector);
+		public static Result<U> Select<T, U>(this Result<T> result, Func<T, U> project) =>
+			result.Map(project);
 
 		#endregion
 	}
