@@ -4,7 +4,7 @@ using static ResultSharp.Prelude;
 
 namespace ResultSharp.Tests
 {
-	public class ResultMethodsTEsts
+	public class ResultMethodsTests
 	{
 		[Fact]
 		public void OkIf_TrueCondition_ReturnsOkResult()
