@@ -13,7 +13,7 @@ namespace ResultSharp
 	{
 		public int CompareTo(Unit other) => 0;
 		public bool Equals(Unit other) => true;
-		public override bool Equals(object obj) => obj is Unit;
+		public override bool Equals(object? obj) => obj is Unit;
 		public override string ToString() => "unit";
 		public override int GetHashCode() => 0;
 		public static bool operator ==(Unit a, Unit b) => true;

@@ -5,7 +5,7 @@ namespace ResultSharp.Tests
 	class DivideByZeroException : Exception
 	{
 		public override bool Equals(object? obj) =>
-			obj is DivideByZeroException ? true : false;
+			obj is DivideByZeroException;
 		public override int GetHashCode() => base.GetHashCode();
 	}
 

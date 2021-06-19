@@ -457,7 +457,7 @@ namespace ResultSharp.Tests
 			int? actual = null;
 			var expected = 1;
 
-			result.Match(
+			_ = result.Match(
 				val => actual = val,
 				_ => throw new Exception()
 			);
@@ -473,7 +473,7 @@ namespace ResultSharp.Tests
 			string? actual = null;
 			var expected = "foo";
 
-			result.Match(
+			_ = result.Match(
 				_ => throw new Exception(),
 				err => actual = err
 			);

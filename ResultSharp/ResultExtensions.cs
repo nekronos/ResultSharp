@@ -143,18 +143,22 @@ namespace ResultSharp
 			result
 				.AndThen(x => Try<U, E>(() => f(x)));
 
+		/// <inheritdoc cref="Result{T, E}.And{U}(Result{U, E})" />
 		public static Result And<T>(this Result<T, string> result, Result other) =>
 			result
 				.Match(_ => other, Result.Err);
 
+		/// <inheritdoc cref="Result{T, E}.And{U}(Result{U, E})" />
 		public static Result<U> And<T, U>(this Result<T, string> result, Result<U> other) =>
 			result
 				.Match(_ => other, Result.Err<U>);
 
+		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
 			result
 				.Match(val => op(val), Result.Err<U>);
 
+		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> op) =>
 			result
 				.Match(op, Result.Err);

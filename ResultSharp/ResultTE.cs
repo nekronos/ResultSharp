@@ -45,17 +45,17 @@ namespace ResultSharp
 			SerializationInfo info,
 			StreamingContext context)
 		{
-			State = (ResultState)info.GetValue(nameof(State), typeof(ResultState));
+			State = (ResultState)info.GetValue(nameof(State), typeof(ResultState))!;
 			switch (State)
 			{
 				case ResultState.Ok:
-					Value = (T)info.GetValue(nameof(Value), typeof(T));
+					Value = (T)info.GetValue(nameof(Value), typeof(T))!;
 					Error = default!;
 					break;
 
 				case ResultState.Err:
 					Value = default!;
-					Error = (E)info.GetValue(nameof(Error), typeof(E));
+					Error = (E)info.GetValue(nameof(Error), typeof(E))!;
 					break;
 
 				default:
@@ -83,12 +83,12 @@ namespace ResultSharp
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal static Result<T, E> Ok(T value) =>
-			new Result<T, E>(value);
+			new(value);
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal static Result<T, E> Err(E error) =>
-			new Result<T, E>(error);
+			new(error);
 
 		/// <summary>
 		/// Is the Result in the Ok state
@@ -160,7 +160,7 @@ namespace ResultSharp
 
 
 		/// <summary>
-		/// Project the Err state from one value to another
+		/// Project the Error state from one value to another
 		/// </summary>
 		/// <typeparam name="F">Resulting Error value type</typeparam>
 		/// <param name="op">Projection function</param>
@@ -171,7 +171,7 @@ namespace ResultSharp
 			BiMap(val => val, err => op(err));
 
 		/// <summary>
-		/// Project the Ok or the Err state from one value to another
+		/// Project the Ok or the Error state from one value to another
 		/// </summary>
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
 		/// <typeparam name="F">Resulting Error value type</typeparam>
@@ -320,7 +320,7 @@ namespace ResultSharp
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static string ToStringNullSafe<U>(U val) =>
+		static string ToStringNullSafe<U>(U? val) =>
 			val?.ToString() ?? "null";
 
 		[Pure]
@@ -361,7 +361,7 @@ namespace ResultSharp
 			);
 
 		[Pure]
-		public override bool Equals(object obj) =>
+		public override bool Equals(object? obj) =>
 			obj switch
 			{
 				Result<T, E> x => Equals(x),
