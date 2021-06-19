@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace ResultSharp
 {
@@ -88,6 +86,12 @@ namespace ResultSharp
 		/// Returns Ok if the condition is true,
 		/// otherwise returns Error
 		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <typeparam name="E">Error type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="value">Ok value</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T, E> OkIf<T, E>(bool condition, T value, E error) =>
@@ -99,6 +103,12 @@ namespace ResultSharp
 		/// Returns Error if the condition is true,
 		/// otherwise returns Ok
 		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <typeparam name="E">Error type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="value">Ok value</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T, E> ErrIf<T, E>(bool condition, T value, E error) =>
@@ -108,6 +118,11 @@ namespace ResultSharp
 		/// Returns Ok if the condition is true,
 		/// otherwise returns Error
 		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="value">Ok value</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T> OkIf<T>(bool condition, T value, string error) =>
@@ -117,6 +132,11 @@ namespace ResultSharp
 		/// Returns Error if the condition is true,
 		/// otherwise returns Ok
 		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="value">Ok value</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T> ErrIf<T>(bool condition, T value, string error) =>
@@ -126,6 +146,9 @@ namespace ResultSharp
 		/// Returns Ok if the condition is true,
 		/// otherwise returns Error
 		/// </summary>
+		/// <param name="condition">The result condition</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result OkIf(bool condition, string error) =>
@@ -135,11 +158,24 @@ namespace ResultSharp
 		/// Returns Error if the condition is true,
 		/// otherwise returns Ok
 		/// </summary>
+		/// <param name="condition">The result condition</param>
+		/// <param name="error">Error value</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result ErrIf(bool condition, string error) =>
 			OkIf(!condition, error);
 
+		/// <summary>
+		/// Returns Ok if the condition is true,
+		/// otherwise returns Error
+		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <typeparam name="E">Error type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="getValue">Ok value getter</param>
+		/// <param name="getError">Error value getter</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T, E> OkIf<T, E>(
@@ -150,6 +186,16 @@ namespace ResultSharp
 				? Ok<T, E>(getValue())
 				: Err<T, E>(getError());
 
+		/// <summary>
+		/// Returns Error if the condition is true,
+		/// otherwise returns Ok
+		/// </summary>
+		/// <typeparam name="T">Ok type</typeparam>
+		/// <typeparam name="E">Error type</typeparam>
+		/// <param name="condition">The result condition</param>
+		/// <param name="getValue">Ok value getter</param>
+		/// <param name="getError">Error value getter</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result<T, E> ErrIf<T, E>(
@@ -158,6 +204,13 @@ namespace ResultSharp
 			Func<E> getError) =>
 			OkIf(!condition, getValue, getError);
 
+		/// <summary>
+		/// Returns Ok if the condition is true,
+		/// otherwise returns Error
+		/// </summary>
+		/// <param name="condition">The result condition</param>
+		/// <param name="getError">Error message getter</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result OkIf(
@@ -165,6 +218,13 @@ namespace ResultSharp
 			Func<string> getError) =>
 			condition ? Ok() : Err(getError());
 
+		/// <summary>
+		/// Returns Error if the condition is true,
+		/// otherwise returns Ok
+		/// </summary>
+		/// <param name="condition">The result condition</param>
+		/// <param name="getError">Error value getter</param>
+		/// <returns>Result</returns>
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Result ErrIf(

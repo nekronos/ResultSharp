@@ -138,7 +138,7 @@ namespace ResultSharp
 
 		[Pure]
 		public override string ToString() =>
-			Inner.Match(_ => "Ok()", err => $"Err({err})");
+			IsOk ? "Ok()" : Inner.ToString();
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
