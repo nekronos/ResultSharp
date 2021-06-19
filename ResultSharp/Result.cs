@@ -20,16 +20,10 @@ namespace ResultSharp
 		Result(Result<Unit, string> inner) =>
 			Inner = inner;
 
-		Result(
-			SerializationInfo info,
-			StreamingContext context)
-		{
+		Result(SerializationInfo info, StreamingContext context) =>
 			Inner = (Result<Unit, string>)info.GetValue(nameof(Inner), typeof(Result<Unit, string>))!;
-		}
 
-		void ISerializable.GetObjectData(
-			SerializationInfo info,
-			StreamingContext context) =>
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
 
 		[Pure]

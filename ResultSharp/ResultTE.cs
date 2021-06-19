@@ -41,43 +41,32 @@ namespace ResultSharp
 			Error = error;
 		}
 
-		Result(
-			SerializationInfo info,
-			StreamingContext context)
+		Result(SerializationInfo info, StreamingContext context)
 		{
 			State = (ResultState)info.GetValue(nameof(State), typeof(ResultState))!;
-			switch (State)
+			(Value, Error) = State switch
 			{
-				case ResultState.Ok:
-					Value = (T)info.GetValue(nameof(Value), typeof(T))!;
-					Error = default!;
-					break;
+				ResultState.Ok => (
+					(T)info.GetValue(nameof(Value), typeof(T))!,
+					default(E)!
+				),
 
-				case ResultState.Err:
-					Value = default!;
-					Error = (E)info.GetValue(nameof(Error), typeof(E))!;
-					break;
+				ResultState.Err => (
+					default(T)!,
+					(E)info.GetValue(nameof(Error), typeof(E))!
+				),
 
-				default:
-					throw new Exception($"Unexpected state: {State}");
-			}
+				_ => throw new Exception($"Unexpected state: {State}")
+			};
 		}
 
-		void ISerializable.GetObjectData(
-			SerializationInfo info,
-			StreamingContext context)
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue(nameof(State), State);
-			switch (State)
-			{
-				case ResultState.Ok:
-					info.AddValue(nameof(Value), Value);
-					break;
-
-				case ResultState.Err:
-					info.AddValue(nameof(Error), Error);
-					break;
-			}
+			Match(
+				ok: value => info.AddValue(nameof(Value), value),
+				err: error => info.AddValue(nameof(Error), error)
+			);
 		}
 
 		[Pure]

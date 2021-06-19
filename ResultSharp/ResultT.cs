@@ -21,12 +21,8 @@ namespace ResultSharp
 		Result(Result<T, string> inner) =>
 			Inner = inner;
 
-		Result(
-			SerializationInfo info,
-			StreamingContext context)
-		{
+		Result(SerializationInfo info, StreamingContext context) =>
 			Inner = (Result<T, string>)info.GetValue(nameof(Inner), typeof(Result<T, string>))!;
-		}
 
 		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) =>
 			info.AddValue(nameof(Inner), Inner);
