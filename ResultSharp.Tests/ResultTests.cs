@@ -473,9 +473,9 @@ namespace ResultSharp.Tests
 			string? actual = null;
 			var expected = "foo";
 
-			_ = result.Match(
+			result.Match(
 				_ => throw new Exception(),
-				err => actual = err
+				new Action<string>(err => actual = err)
 			);
 
 			actual.Should().Be(expected);
