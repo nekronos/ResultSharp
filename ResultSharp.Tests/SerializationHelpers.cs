@@ -1,26 +1,14 @@
 ﻿using System.Runtime.Serialization;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 namespace ResultSharp.Tests
 {
 	static class SerializationHelpers
 	{
-		public static byte[] Serialize<T>(T obj) where T : ISerializable
-		{
-			using (var stream = new MemoryStream())
-			{
-				new BinaryFormatter().Serialize(stream, obj);
-				return stream.ToArray();
-			}
-		}
+		public static string Serialize<T>(T obj) where T : ISerializable =>
+			JsonConvert.SerializeObject(obj);
 
-		public static T Deserialize<T>(byte[] data) where T : ISerializable
-		{
-			using (var stream = new MemoryStream(data))
-			{
-				return (T)new BinaryFormatter().Deserialize(stream);
-			}
-		}
+		public static T Deserialize<T>(string json) where T : ISerializable =>
+			JsonConvert.DeserializeObject<T>(json)!;
 	}
 }

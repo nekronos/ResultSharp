@@ -352,10 +352,10 @@ namespace ResultSharp.Tests
 		{
 			Result<string, int> result = Ok("fooBAR");
 
-			var bin = SerializationHelpers.Serialize(result);
+			var json = SerializationHelpers.Serialize(result);
 
 			var expected = result;
-			var actual = SerializationHelpers.Deserialize<Result<string, int>>(bin);
+			var actual = SerializationHelpers.Deserialize<Result<string, int>>(json);
 
 			actual.Should().Be(expected);
 		}
@@ -365,10 +365,10 @@ namespace ResultSharp.Tests
 		{
 			Result<string, int> result = Err(-1);
 
-			var bin = SerializationHelpers.Serialize(result);
+			var json = SerializationHelpers.Serialize(result);
 
 			var expected = result;
-			var actual = SerializationHelpers.Deserialize<Result<string, int>>(bin);
+			var actual = SerializationHelpers.Deserialize<Result<string, int>>(json);
 
 			actual.Should().Be(expected);
 		}
