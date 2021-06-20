@@ -5,12 +5,6 @@ using System.Runtime.Serialization;
 
 namespace ResultSharp
 {
-	internal enum ResultState
-	{
-		Ok = 1,
-		Err,
-	}
-
 	/// <summary>
 	/// Union type that can be in one of two states:
 	/// Ok(<typeparamref name="T"/>) or Err(<typeparamref name="E"/>)
@@ -23,6 +17,12 @@ namespace ResultSharp
 		IEquatable<Result<T, E>>,
 		IResult
 	{
+		enum ResultState
+		{
+			Ok = 1,
+			Err,
+		}
+
 		readonly ResultState State;
 		readonly T Value;
 		readonly E Error;
