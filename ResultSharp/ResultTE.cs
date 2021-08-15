@@ -23,8 +23,8 @@ namespace ResultSharp
 		}
 
 		readonly ResultState State;
-		readonly T Value;
-		readonly E Error;
+		internal readonly T Value;
+		internal readonly E Error;
 
 		Result(T value)
 		{
@@ -135,8 +135,10 @@ namespace ResultSharp
 		/// <returns>Mapped Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> Map<U>(Func<T, U> op) =>
-			BiMap(val => op(val), err => err);
-
+			Match(
+				value => Result.Ok<U, E>(op(value)),
+				Result.Err<U, E>
+			);
 
 		/// <summary>
 		/// Project the Error state from one value to another
@@ -146,7 +148,10 @@ namespace ResultSharp
 		/// <returns>Mapped Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
-			BiMap(val => val, err => op(err));
+			Match(
+				Result.Ok<T, F>,
+				err => Result.Err<T, F>(op(err))
+			);
 
 		/// <summary>
 		/// Project the Ok or the Error state from one value to another
@@ -181,7 +186,7 @@ namespace ResultSharp
 		/// <returns>Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
-			Match(val => op(val), Result.Err<U, E>);
+			Match(op, Result.Err<U, E>);
 
 		/// <summary>
 		/// Returns other if the result is Err, otherwise returns the Ok value of this.
@@ -201,7 +206,7 @@ namespace ResultSharp
 		/// <returns>Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
-			Match(Result.Ok<T, F>, err => op(err));
+			Match(Result.Ok<T, F>, op);
 
 		/// <summary>
 		/// Returns the contained Ok value, or throws UnwrapException if
@@ -325,8 +330,8 @@ namespace ResultSharp
 			obj switch
 			{
 				Result<T, E> x => Equals(x),
-				ResultOk<T> x => Equals(x),
-				ResultErr<E> x => Equals(x),
+				ResultOk<T> x => Equals(x.Value),
+				ResultErr<E> x => Equals(x.Error),
 				_ => false,
 			};
 
@@ -344,9 +349,11 @@ namespace ResultSharp
 		R IResult.MatchUntyped<R>(Func<object?, R> okFn, Func<object?, R> errFn) =>
 			Match(val => okFn(val), err => errFn(err));
 
-		object? IResult.UnwrapUntyped() => Unwrap();
+		object? IResult.UnwrapUntyped() =>
+			Unwrap();
 
-		object? IResult.UnwrapErrUntyped() => UnwrapErr();
+		object? IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(Result<T, E> lhs, Result<T, E> rhs) =>
