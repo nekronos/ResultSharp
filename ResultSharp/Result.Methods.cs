@@ -200,7 +200,9 @@ namespace ResultSharp
 		public static Result OkIf(
 			bool condition,
 			Func<string> getError) =>
-			condition ? Ok() : Err(getError());
+			condition
+				? Ok()
+				: Err(getError());
 
 		/// <summary>
 		/// Returns Error if the condition is true,

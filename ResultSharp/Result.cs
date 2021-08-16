@@ -34,16 +34,20 @@ namespace ResultSharp
 			new(Err<Unit, string>(error));
 
 		/// <inheritdoc cref="Result{T, E}.IsOk" />
-		public bool IsOk => Inner.IsOk;
+		public bool IsOk =>
+			Inner.IsOk;
 
 		/// <inheritdoc cref="Result{T, E}.IsErr" />
-		public bool IsErr => Inner.IsErr;
+		public bool IsErr =>
+			Inner.IsErr;
 
 		/// <inheritdoc cref="Result{T, E}.OkType" />
-		public Type OkType => Inner.OkType;
+		public Type OkType =>
+			Inner.OkType;
 
 		/// <inheritdoc cref="Result{T, E}.ErrType" />
-		public Type ErrType => Inner.ErrType;
+		public Type ErrType =>
+			Inner.ErrType;
 
 		/// <inheritdoc cref="Result{T, E}.Map{U}(Func{T, U})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,9 +136,11 @@ namespace ResultSharp
 		R IResult.MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
 			((IResult)Inner).MatchUntyped(ok, err);
 
-		object? IResult.UnwrapUntyped() => Unwrap();
+		object? IResult.UnwrapUntyped() =>
+			Unwrap();
 
-		object? IResult.UnwrapErrUntyped() => UnwrapErr();
+		object? IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(Result lhs, Result rhs) =>

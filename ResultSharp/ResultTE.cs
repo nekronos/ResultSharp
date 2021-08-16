@@ -344,9 +344,11 @@ namespace ResultSharp
 		R IResult.MatchUntyped<R>(Func<object?, R> okFn, Func<object?, R> errFn) =>
 			Match(val => okFn(val), err => errFn(err));
 
-		object? IResult.UnwrapUntyped() => Unwrap();
+		object? IResult.UnwrapUntyped() =>
+			Unwrap();
 
-		object? IResult.UnwrapErrUntyped() => UnwrapErr();
+		object? IResult.UnwrapErrUntyped() =>
+			UnwrapErr();
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(Result<T, E> lhs, Result<T, E> rhs) =>
