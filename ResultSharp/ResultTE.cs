@@ -181,7 +181,7 @@ namespace ResultSharp
 		/// <returns>Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
-			Match(val => op(val), Result.Err<U, E>);
+			Match(op, Result.Err<U, E>);
 
 		/// <summary>
 		/// Returns other if the result is Err, otherwise returns the Ok value of this.
@@ -201,7 +201,7 @@ namespace ResultSharp
 		/// <returns>Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
-			Match(Result.Ok<T, F>, err => op(err));
+			Match(Result.Ok<T, F>, op);
 
 		/// <summary>
 		/// Returns the contained Ok value, or throws UnwrapException if

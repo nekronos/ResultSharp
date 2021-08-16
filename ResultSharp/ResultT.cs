@@ -94,7 +94,7 @@ namespace ResultSharp
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result AndThen(Func<T, Result> op) =>
-			Inner.Match(val => op(val), Result.Err);
+			Inner.Match(op, Result.Err);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +104,7 @@ namespace ResultSharp
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U> AndThen<U>(Func<T, Result<U, string>> op) =>
-			Inner.AndThen<U>(x => op(x));
+			Inner.AndThen(op);
 
 		/// <inheritdoc cref="Result{T, E}.Or{F}(Result{T, F})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -119,12 +119,12 @@ namespace ResultSharp
 		/// <inheritdoc cref="Result{T, E}.OrElse{F}(Func{E, Result{T, F}})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T> OrElse(Func<string, Result<T, string>> op) =>
-			Inner.OrElse(x => op(x));
+			Inner.OrElse(op);
 
 		/// <inheritdoc cref="Result{T, E}.OrElse{F}(Func{E, Result{T, F}})" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
-			Inner.OrElse(x => op(x));
+			Inner.OrElse(op);
 
 		/// <inheritdoc cref="Result{T, E}.Unwrap" />
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
