@@ -19,6 +19,11 @@
 		<PackageProjectUrl>https://github.com/nekronos/ResultSharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/nekronos/ResultSharp</RepositoryUrl>
 		<PackageLicense>https://github.com/nekronos/ResultSharp/blob/master/LICENSE</PackageLicense>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>
