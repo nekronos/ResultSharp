@@ -19,7 +19,7 @@ namespace ResultSharp
 		public static Result<IEnumerable<T>, IEnumerable<E>> Combine<T, E>(
 			this IEnumerable<Result<T, E>> results)
 		{
-			var data = results as ICollection<Result<T, E>> ?? results.ToArray();
+			var data = results as IReadOnlyCollection<Result<T, E>> ?? results.ToArray();
 			var errors = data
 				.Where(x => x.IsErr)
 				.Select(x => x.Error)
