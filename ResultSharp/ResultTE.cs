@@ -330,8 +330,8 @@ namespace ResultSharp
 			obj switch
 			{
 				Result<T, E> x => Equals(x),
-				ResultOk<T> x => Equals(x),
-				ResultErr<E> x => Equals(x),
+				ResultOk<T> x => Equals(x.Value),
+				ResultErr<E> x => Equals(x.Error),
 				_ => false,
 			};
 
