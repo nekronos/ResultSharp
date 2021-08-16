@@ -68,11 +68,9 @@ namespace ResultSharp
 			);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal static Result<T, E> Ok(T value) =>
 			new(value);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal static Result<T, E> Err(E error) =>
 			new(error);
 
@@ -107,7 +105,6 @@ namespace ResultSharp
 		/// <param name="ok">Ok match operation</param>
 		/// <param name="err">Error match operation</param>
 		/// <returns>Ret</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<E, Ret> err) =>
 			IsOk
 				? ok(Value)
@@ -118,7 +115,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <param name="ok">Ok match operation</param>
 		/// <param name="err">Error match operation</param>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Match(Action<T> ok, Action<E> err)
 		{
 			if (IsOk)
@@ -133,7 +129,6 @@ namespace ResultSharp
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
 		/// <param name="op">Projection function</param>
 		/// <returns>Mapped Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> Map<U>(Func<T, U> op) =>
 			Match(
 				value => Result.Ok<U, E>(op(value)),
@@ -146,7 +141,6 @@ namespace ResultSharp
 		/// <typeparam name="F">Resulting Error value type</typeparam>
 		/// <param name="op">Projection function</param>
 		/// <returns>Mapped Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
 			Match(
 				Result.Ok<T, F>,
@@ -161,7 +155,6 @@ namespace ResultSharp
 		/// <param name="okOp">Ok projection function</param>
 		/// <param name="errOp">Err projection function</param>
 		/// <returns>Mapped Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, F> BiMap<U, F>(Func<T, U> okOp, Func<E, F> errOp) =>
 			Match(
 				val => Result.Ok<U, F>(okOp(val)),
@@ -174,7 +167,6 @@ namespace ResultSharp
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
 		/// <param name="other">the other Result</param>
 		/// <returns>Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> And<U>(Result<U, E> other) =>
 			Match(_ => other, Result.Err<U, E>);
 
@@ -184,7 +176,6 @@ namespace ResultSharp
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
 		/// <param name="op">op</param>
 		/// <returns>Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
 			Match(op, Result.Err<U, E>);
 
@@ -194,7 +185,6 @@ namespace ResultSharp
 		/// <typeparam name="F">Resulting Err value type</typeparam>
 		/// <param name="other">the other Result</param>
 		/// <returns>Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> Or<F>(Result<T, F> other) =>
 			Match(Result.Ok<T, F>, _ => other);
 
@@ -204,7 +194,6 @@ namespace ResultSharp
 		/// <typeparam name="F">Resulting Err value type</typeparam>
 		/// <param name="op">op</param>
 		/// <returns>Result</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
 			Match(Result.Ok<T, F>, op);
 
@@ -214,7 +203,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <exception cref="UnwrapException">Thrown if the Result is faulted</exception>
 		/// <returns>The contained value</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T Unwrap() =>
 			Match(
 				val => val,
@@ -226,7 +214,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <param name="defaultValue">default value</param>
 		/// <returns>The contained or default value</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T UnwrapOr(T defaultValue) =>
 			Match(val => val, _ => defaultValue);
 
@@ -235,7 +222,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <param name="op">operation</param>
 		/// <returns>The contained or computed value</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T UnwrapOrElse(Func<T> op) =>
 			Match(val => val, _ => op());
 
@@ -244,7 +230,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <param name="op">operation</param>
 		/// <returns>The contained or computed value</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T UnwrapOrElse(Func<E, T> op) =>
 			Match(val => val, op);
 
@@ -254,7 +239,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <exception cref="UnwrapErrException">Thrown if the Result is Ok</exception>
 		/// <returns>The contained error</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public E UnwrapErr() =>
 			Match(
 				val => throw new UnwrapErrException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(val)}'"),
@@ -268,7 +252,6 @@ namespace ResultSharp
 		/// <exception cref="ExpectException">Thrown if the Result is faulted</exception>
 		/// <param name="msg">error message</param>
 		/// <returns>The contained value</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T Expect(string msg) =>
 			Match(
 				val => val,
@@ -282,18 +265,15 @@ namespace ResultSharp
 		/// <exception cref="ExpectErrException">Thrown if the Result is Ok</exception>
 		/// <param name="msg">error message</param>
 		/// <returns>The contained error</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public E ExpectErr(string msg) =>
 			Match(
 				_ => throw new ExpectErrException(msg),
 				err => err
 			);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		static string ToStringNullSafe<U>(U? val) =>
 			val?.ToString() ?? "null";
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override string ToString() =>
 			Match(
 				val => $"Ok({ToStringNullSafe(val)})",
@@ -307,7 +287,6 @@ namespace ResultSharp
 		/// </summary>
 		/// <param name="other">The other `Result` to compare with this</param>
 		/// <returns>True if `this` and `other` are equal</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(Result<T, E> other) =>
 			other.Match(Equals, Equals);
 
@@ -355,19 +334,15 @@ namespace ResultSharp
 		object? IResult.UnwrapErrUntyped() =>
 			UnwrapErr();
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(Result<T, E> lhs, Result<T, E> rhs) =>
 			lhs.Equals(rhs);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator !=(Result<T, E> lhs, Result<T, E> rhs) =>
 			!(lhs == rhs);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Result<T, E>(ResultOk<T> ok) =>
 			Ok(ok.Value);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Result<T, E>(ResultErr<E> err) =>
 			Err(err.Error);
 	}
