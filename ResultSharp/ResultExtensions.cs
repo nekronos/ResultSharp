@@ -19,10 +19,10 @@ namespace ResultSharp
 		public static Result<IEnumerable<T>, IEnumerable<E>> Combine<T, E>(
 			this IEnumerable<Result<T, E>> results)
 		{
-			var data = results as Result<T, E>[] ?? results.ToArray();
+			var data = results as ICollection<Result<T, E>> ?? results.ToArray();
 			var errors = data
 				.Where(x => x.IsErr)
-				.Select(x => x.UnwrapErr())
+				.Select(x => x.Error)
 				.ToArray();
 			if (errors.Any())
 			{
@@ -31,7 +31,7 @@ namespace ResultSharp
 			else
 			{
 				var oks = data
-					.Select(x => x.Unwrap())
+					.Select(x => x.Value)
 					.ToArray()
 					.AsEnumerable();
 				return Ok(oks);

@@ -23,8 +23,8 @@ namespace ResultSharp
 		}
 
 		readonly ResultState State;
-		readonly T Value;
-		readonly E Error;
+		internal readonly T Value;
+		internal readonly E Error;
 
 		Result(T value)
 		{
