@@ -135,8 +135,10 @@ namespace ResultSharp
 		/// <returns>Mapped Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<U, E> Map<U>(Func<T, U> op) =>
-			BiMap(val => op(val), err => err);
-
+			Match(
+				value => Result.Ok<U, E>(op(value)),
+				Result.Err<U, E>
+			);
 
 		/// <summary>
 		/// Project the Error state from one value to another
@@ -146,7 +148,10 @@ namespace ResultSharp
 		/// <returns>Mapped Result</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Result<T, F> MapErr<F>(Func<E, F> op) =>
-			BiMap(val => val, err => op(err));
+			Match(
+				Result.Ok<T, F>,
+				err => Result.Err<T, F>(op(err))
+			);
 
 		/// <summary>
 		/// Project the Ok or the Error state from one value to another
