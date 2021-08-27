@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using FluentAssertions;
+using FluentAssertions.ResultSharp;
 using static ResultSharp.Prelude;
 
 namespace ResultSharp.Tests
@@ -179,7 +180,7 @@ namespace ResultSharp.Tests
 			var expected = Ok(20);
 			var actual = result.BiMap(val => val * 2, _ => "Unexpected");
 
-			actual.Should().BeEquivalentTo(expected);
+			actual.Should().Be(expected);
 		}
 
 		[Fact]

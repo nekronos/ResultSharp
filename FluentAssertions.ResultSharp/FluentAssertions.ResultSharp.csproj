@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		<TargetFramework>net5</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>FluentAssertions.ResultSharp</PackageId>
+		<Title>FluentAssertions.ResultSharp</Title>
+		<PackageVersion>0.2.6</PackageVersion>
+		<Authors>Vegard Strand Lende</Authors>
+		<Summary>FluentAssertions extensions for ResultSharp</Summary>
+		<PackageTags>FluentAssertions, Testing</PackageTags>
+		<PackageProjectUrl>https://github.com/nekronos/ResultSharp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/nekronos/ResultSharp</RepositoryUrl>
+		<PackageLicense>https://github.com/nekronos/ResultSharp/blob/master/LICENSE</PackageLicense>
+	<!--	<PackageReadmeFile>README.md</PackageReadmeFile>-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="5.10.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ResultSharp\ResultSharp.csproj" />
+	</ItemGroup>
+
+	<!--<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>-->
+
+</Project>
