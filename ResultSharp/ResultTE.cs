@@ -127,11 +127,11 @@ namespace ResultSharp
 		/// Project the Ok state from one value to another
 		/// </summary>
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
-		/// <param name="op">Projection function</param>
+		/// <param name="fn">Projection function</param>
 		/// <returns>Mapped Result</returns>
-		public Result<U, E> Map<U>(Func<T, U> op) =>
+		public Result<U, E> Map<U>(Func<T, U> fn) =>
 			Match(
-				value => Result.Ok<U, E>(op(value)),
+				value => Result.Ok<U, E>(fn(value)),
 				Result.Err<U, E>
 			);
 
@@ -139,12 +139,12 @@ namespace ResultSharp
 		/// Project the Error state from one value to another
 		/// </summary>
 		/// <typeparam name="F">Resulting Error value type</typeparam>
-		/// <param name="op">Projection function</param>
+		/// <param name="fn">Projection function</param>
 		/// <returns>Mapped Result</returns>
-		public Result<T, F> MapErr<F>(Func<E, F> op) =>
+		public Result<T, F> MapErr<F>(Func<E, F> fn) =>
 			Match(
 				Result.Ok<T, F>,
-				err => Result.Err<T, F>(op(err))
+				err => Result.Err<T, F>(fn(err))
 			);
 
 		/// <summary>
@@ -152,13 +152,13 @@ namespace ResultSharp
 		/// </summary>
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
 		/// <typeparam name="F">Resulting Error value type</typeparam>
-		/// <param name="okOp">Ok projection function</param>
-		/// <param name="errOp">Err projection function</param>
+		/// <param name="ok">Ok projection function</param>
+		/// <param name="err">Err projection function</param>
 		/// <returns>Mapped Result</returns>
-		public Result<U, F> BiMap<U, F>(Func<T, U> okOp, Func<E, F> errOp) =>
+		public Result<U, F> BiMap<U, F>(Func<T, U> ok, Func<E, F> err) =>
 			Match(
-				val => Result.Ok<U, F>(okOp(val)),
-				err => Result.Err<U, F>(errOp(err))
+				value => Result.Ok<U, F>(ok(value)),
+				error => Result.Err<U, F>(err(error))
 			);
 
 		/// <summary>
@@ -171,13 +171,13 @@ namespace ResultSharp
 			Match(_ => other, Result.Err<U, E>);
 
 		/// <summary>
-		/// Calls op if the result is Ok, otherwise returns the Err value of this.
+		/// Calls fn if the result is Ok, otherwise returns the Err value of this.
 		/// </summary>
 		/// <typeparam name="U">Resulting Ok value type</typeparam>
-		/// <param name="op">op</param>
+		/// <param name="fn">fn</param>
 		/// <returns>Result</returns>
-		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> op) =>
-			Match(op, Result.Err<U, E>);
+		public Result<U, E> AndThen<U>(Func<T, Result<U, E>> fn) =>
+			Match(fn, Result.Err<U, E>);
 
 		/// <summary>
 		/// Returns other if the result is Err, otherwise returns the Ok value of this.
@@ -189,13 +189,13 @@ namespace ResultSharp
 			Match(Result.Ok<T, F>, _ => other);
 
 		/// <summary>
-		/// Calls op if the result is Err, otherwise returns the Ok value of this.
+		/// Calls fn if the result is Err, otherwise returns the Ok value of this.
 		/// </summary>
 		/// <typeparam name="F">Resulting Err value type</typeparam>
-		/// <param name="op">op</param>
+		/// <param name="fn">fn</param>
 		/// <returns>Result</returns>
-		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> op) =>
-			Match(Result.Ok<T, F>, op);
+		public Result<T, F> OrElse<F>(Func<E, Result<T, F>> fn) =>
+			Match(Result.Ok<T, F>, fn);
 
 		/// <summary>
 		/// Returns the contained Ok value, or throws UnwrapException if
@@ -220,18 +220,18 @@ namespace ResultSharp
 		/// <summary>
 		/// Returns the contained Ok value, or computes it from the provided delegate
 		/// </summary>
-		/// <param name="op">operation</param>
+		/// <param name="fn">operation</param>
 		/// <returns>The contained or computed value</returns>
-		public T UnwrapOrElse(Func<T> op) =>
-			Match(val => val, _ => op());
+		public T UnwrapOrElse(Func<T> fn) =>
+			Match(val => val, _ => fn());
 
 		/// <summary>
 		/// Returns the contained Ok value, or computes it from the error value using the provided delegate
 		/// </summary>
-		/// <param name="op">operation</param>
+		/// <param name="fn">operation</param>
 		/// <returns>The contained or computed value</returns>
-		public T UnwrapOrElse(Func<E, T> op) =>
-			Match(val => val, op);
+		public T UnwrapOrElse(Func<E, T> fn) =>
+			Match(val => val, fn);
 
 		/// <summary>
 		/// Returns the contained Err value, or throws UnwrapErrException if
@@ -325,8 +325,8 @@ namespace ResultSharp
 				err => HashCode.Combine(ResultState.Err, err)
 			);
 
-		R IResult.MatchUntyped<R>(Func<object?, R> okFn, Func<object?, R> errFn) =>
-			Match(val => okFn(val), err => errFn(err));
+		R IResult.MatchUntyped<R>(Func<object?, R> ok, Func<object?, R> err) =>
+			Match(value => ok(value), error => err(error));
 
 		object? IResult.UnwrapUntyped() =>
 			Unwrap();

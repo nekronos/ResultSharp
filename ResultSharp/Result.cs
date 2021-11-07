@@ -48,8 +48,8 @@ namespace ResultSharp
 			Inner.ErrType;
 
 		/// <inheritdoc cref="Result{T, E}.Map{U}(Func{T, U})" />
-		public Result<T> Map<T>(Func<T> op) =>
-			Inner.Map(_ => op());
+		public Result<T> Map<T>(Func<T> fn) =>
+			Inner.Map(_ => fn());
 
 		/// <inheritdoc cref="Result{T, E}.Match{Ret}(Func{T, Ret}, Func{E, Ret})" />
 		public TRet Match<TRet>(Func<TRet> ok, Func<string, TRet> err) =>
@@ -68,16 +68,16 @@ namespace ResultSharp
 			Inner.And(other.Inner);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result AndThen(Func<Result> op) =>
-			Inner.AndThen<Unit>(_ => op());
+		public Result AndThen(Func<Result> fn) =>
+			Inner.AndThen<Unit>(_ => fn());
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result<T> AndThen<T>(Func<Result<T>> op) =>
-			Inner.AndThen<T>(_ => op());
+		public Result<T> AndThen<T>(Func<Result<T>> fn) =>
+			Inner.AndThen<T>(_ => fn());
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result<T> AndThen<T>(Func<Result<T, string>> op) =>
-			Inner.AndThen(_ => op());
+		public Result<T> AndThen<T>(Func<Result<T, string>> fn) =>
+			Inner.AndThen(_ => fn());
 
 		/// <inheritdoc cref="Result{T, E}.Or{F}(Result{T, F})" />
 		public Result Or(Result other) =>

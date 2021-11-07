@@ -53,24 +53,24 @@ namespace ResultSharp
 			Inner.Match(ok, err);
 
 		/// <inheritdoc cref="Result{T, E}.Map{U}(Func{T, U})" />
-		public Result<U> Map<U>(Func<T, U> op) =>
-			Inner.Map(op);
+		public Result<U> Map<U>(Func<T, U> fn) =>
+			Inner.Map(fn);
 
 		/// <inheritdoc cref="Result{T, E}.BiMap{U, F}(Func{T, U}, Func{E, F})" />
-		public Result<U> BiMap<U>(Func<T, U> okOp, Func<string, string> errOp) =>
-			Inner.BiMap(okOp, errOp);
+		public Result<U> BiMap<U>(Func<T, U> ok, Func<string, string> err) =>
+			Inner.BiMap(ok, err);
 
 		/// <inheritdoc cref="Result{T}.BiMap{U}(Func{T, U}, Func{string, string})" />
-		public Result<U, E> BiMap<U, E>(Func<T, U> okOp, Func<string, E> errOp) =>
-			Inner.BiMap(okOp, errOp);
+		public Result<U, E> BiMap<U, E>(Func<T, U> ok, Func<string, E> err) =>
+			Inner.BiMap(ok, err);
 
 		/// <inheritdoc cref="Result{T, E}.MapErr{F}(Func{E, F})" />
-		public Result<T> MapErr(Func<string, string> op) =>
-			Inner.MapErr(op);
+		public Result<T> MapErr(Func<string, string> fn) =>
+			Inner.MapErr(fn);
 
 		/// <inheritdoc cref="Result{T, E}.MapErr{F}(Func{E, F})" />
-		public Result<T, E> MapErr<E>(Func<string, E> op) =>
-			Inner.MapErr(op);
+		public Result<T, E> MapErr<E>(Func<string, E> fn) =>
+			Inner.MapErr(fn);
 
 		/// <inheritdoc cref="Result{T, E}.And{U}(Result{U, E})" />
 		public Result<U> And<U>(Result<U> other) =>
@@ -81,32 +81,32 @@ namespace ResultSharp
 			Inner.And(other);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result AndThen(Func<T, Result> op) =>
-			Inner.Match(op, Result.Err);
+		public Result AndThen(Func<T, Result> fn) =>
+			Inner.Match(fn, Result.Err);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result<U> AndThen<U>(Func<T, Result<U>> op) =>
-			Inner.AndThen<U>(x => op(x));
+		public Result<U> AndThen<U>(Func<T, Result<U>> fn) =>
+			Inner.AndThen<U>(x => fn(x));
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public Result<U> AndThen<U>(Func<T, Result<U, string>> op) =>
-			Inner.AndThen(op);
+		public Result<U> AndThen<U>(Func<T, Result<U, string>> fn) =>
+			Inner.AndThen(fn);
 
 		/// <inheritdoc cref="Result{T, E}.Or{F}(Result{T, F})" />
 		public Result<T> Or(Result<T> other) =>
 			Inner.Or(other.Inner);
 
 		/// <inheritdoc cref="Result{T, E}.OrElse{F}(Func{E, Result{T, F}})" />
-		public Result<T> OrElse(Func<string, Result<T>> op) =>
-			Inner.OrElse<string>(x => op(x));
+		public Result<T> OrElse(Func<string, Result<T>> fn) =>
+			Inner.OrElse<string>(x => fn(x));
 
 		/// <inheritdoc cref="Result{T, E}.OrElse{F}(Func{E, Result{T, F}})" />
-		public Result<T> OrElse(Func<string, Result<T, string>> op) =>
-			Inner.OrElse(op);
+		public Result<T> OrElse(Func<string, Result<T, string>> fn) =>
+			Inner.OrElse(fn);
 
 		/// <inheritdoc cref="Result{T, E}.OrElse{F}(Func{E, Result{T, F}})" />
-		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> op) =>
-			Inner.OrElse(op);
+		public Result<T, E> OrElse<E>(Func<string, Result<T, E>> fn) =>
+			Inner.OrElse(fn);
 
 		/// <inheritdoc cref="Result{T, E}.Unwrap" />
 		public T Unwrap() =>
@@ -117,12 +117,12 @@ namespace ResultSharp
 			Inner.UnwrapOr(defaultValue);
 
 		/// <inheritdoc cref="Result{T, E}.UnwrapOrElse(Func{T})" />
-		public T UnwrapOrElse(Func<T> op) =>
-			Inner.UnwrapOrElse(op);
+		public T UnwrapOrElse(Func<T> fn) =>
+			Inner.UnwrapOrElse(fn);
 
 		/// <inheritdoc cref="Result{T, E}.UnwrapOrElse(Func{T})" />
-		public T UnwrapOrElse(Func<string, T> op) =>
-			Inner.UnwrapOrElse(op);
+		public T UnwrapOrElse(Func<string, T> fn) =>
+			Inner.UnwrapOrElse(fn);
 
 		/// <inheritdoc cref="Result{T, E}.UnwrapErr" />
 		public string UnwrapErr() =>

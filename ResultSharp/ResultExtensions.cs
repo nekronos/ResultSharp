@@ -53,7 +53,7 @@ namespace ResultSharp
 				.Select(x => x.Inner)
 				.Combine(
 					_ => Unit.Default,
-					errs => string.Join(errorMessageSeparator, errs)
+					errors => string.Join(errorMessageSeparator, errors)
 				);
 
 		/// <summary>
@@ -69,78 +69,80 @@ namespace ResultSharp
 			string errorMessageSeparator) =>
 			results
 				.Select(x => x.Inner)
-				.Combine(combineErr: errs => string.Join(errorMessageSeparator, errs));
+				.Combine(err: errors => string.Join(errorMessageSeparator, errors));
 
 		/// <summary>
 		/// Combines multiple results into a single result, combining either the
 		/// Ok values or the Err values with the provided functions.
 		/// </summary>
 		/// <param name="results">The Results to be combined</param>
-		/// <param name="combineOk">Ok combinator function</param>
-		/// <param name="combineErr">Err combinator function</param>
+		/// <param name="ok">Ok combinator function</param>
+		/// <param name="err">Err combinator function</param>
 		/// <returns>The combined Result</returns>
 		public static Result<U, E> Combine<T, U, E>(
 			this IEnumerable<Result<T>> results,
-			Func<IEnumerable<T>, U> combineOk,
-			Func<IEnumerable<string>, E> combineErr) =>
+			Func<IEnumerable<T>, U> ok,
+			Func<IEnumerable<string>, E> err) =>
 			results
 				.Select(x => x.Inner)
-				.Combine(combineOk, combineErr);
+				.Combine(ok, err);
 
 		/// <summary>
 		/// Combines multiple results into a single result, combining either the
 		/// Ok values or the Err values with the provided functions.
 		/// </summary>
 		/// <param name="results">The Results to be combined</param>
-		/// <param name="combineOk">Ok combinator function</param>
-		/// <param name="combineErr">Err combinator function</param>
+		/// <param name="ok">Ok combinator function</param>
+		/// <param name="err">Err combinator function</param>
 		/// <returns>The combined Result</returns>
 		public static Result<U, F> Combine<T, U, E, F>(
 			this IEnumerable<Result<T, E>> results,
-			Func<IEnumerable<T>, U> combineOk,
-			Func<IEnumerable<E>, F> combineErr) =>
+			Func<IEnumerable<T>, U> ok,
+			Func<IEnumerable<E>, F> err) =>
 			results
 				.Combine()
-				.BiMap(combineOk, combineErr);
+				.BiMap(ok, err);
 
 		/// <summary>
 		/// Combines multiple results into a single result, combining the
 		/// Err values with the provided function.
 		/// </summary>
 		/// <param name="results">The Results to be combined</param>
-		/// <param name="combineErr">Err combinator function</param>
+		/// <param name="err">Err combinator function</param>
 		/// <returns>The combined Result</returns>
 		public static Result<IEnumerable<T>, F> Combine<T, E, F>(
 			this IEnumerable<Result<T, E>> results,
-			Func<IEnumerable<E>, F> combineErr) =>
+			Func<IEnumerable<E>, F> err) =>
 			results
 				.Combine()
-				.MapErr(combineErr);
+				.MapErr(err);
 
 		/// <summary>
 		/// Combines multiple results into a single result, combining the
 		/// Ok values with the provided function.
 		/// </summary>
 		/// <param name="results">The Results to be combined</param>
-		/// <param name="combineOk">Ok combinator function</param>
+		/// <param name="ok">Ok combinator function</param>
 		/// <returns>The combined Result</returns>
 		public static Result<U, IEnumerable<E>> Combine<T, U, E>(
 			this IEnumerable<Result<T, E>> results,
-			Func<IEnumerable<T>, U> combineOk) =>
+			Func<IEnumerable<T>, U> ok) =>
 			results
 				.Combine()
-				.Map(combineOk);
+				.Map(ok);
 
 		public static Result<IEnumerable<T>, IEnumerable<E>> CombineMany<T, E>(
 			this IEnumerable<Result<IEnumerable<T>, IEnumerable<E>>> results) =>
 			results
-				.Combine()
-				.BiMap(EnumerableExtensions.Flatten, EnumerableExtensions.Flatten);
+				.Combine(
+					ok: EnumerableExtensions.Flatten,
+					err: EnumerableExtensions.Flatten
+				);
 
-		public static Result<U, E> AndThenTry<T, U, E>(this Result<T, E> result, Func<T, U> f)
+		public static Result<U, E> AndThenTry<T, U, E>(this Result<T, E> result, Func<T, U> fn)
 			where E : Exception =>
 			result
-				.AndThen(x => Try<U, E>(() => f(x)));
+				.AndThen(x => Try<U, E>(() => fn(x)));
 
 		/// <inheritdoc cref="Result{T, E}.And{U}(Result{U, E})" />
 		public static Result And<T>(this Result<T, string> result, Result other) =>
@@ -153,14 +155,14 @@ namespace ResultSharp
 				.Match(_ => other, Result.Err<U>);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> op) =>
+		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> fn) =>
 			result
-				.Match(val => op(val), Result.Err<U>);
+				.Match(val => fn(val), Result.Err<U>);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
-		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> op) =>
+		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> fn) =>
 			result
-				.Match(op, Result.Err);
+				.Match(fn, Result.Err);
 	}
 
 	internal static class EnumerableExtensions
