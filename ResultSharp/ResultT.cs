@@ -129,12 +129,12 @@ namespace ResultSharp
 			Inner.UnwrapErr();
 
 		/// <inheritdoc cref="Result{T, E}.Expect(string)" />
-		public T Expect(string msg) =>
-			Inner.Expect(msg);
+		public T Expect(string message) =>
+			Inner.Expect(message);
 
 		/// <inheritdoc cref="Result{T, E}.ExpectErr(string)" />
-		public string ExpectErr(string msg) =>
-			Inner.ExpectErr(msg);
+		public string ExpectErr(string message) =>
+			Inner.ExpectErr(message);
 
 		public override string ToString() =>
 			Inner.ToString();

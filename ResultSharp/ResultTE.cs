@@ -144,7 +144,7 @@ namespace ResultSharp
 		public Result<T, F> MapErr<F>(Func<E, F> fn) =>
 			Match(
 				Result.Ok<T, F>,
-				err => Result.Err<T, F>(fn(err))
+				error => Result.Err<T, F>(fn(error))
 			);
 
 		/// <summary>
@@ -205,8 +205,8 @@ namespace ResultSharp
 		/// <returns>The contained value</returns>
 		public T Unwrap() =>
 			Match(
-				val => val,
-				err => throw new UnwrapException($"{Messages.UnwrapCalledOnAFaultedResult}: '{ToStringNullSafe(err)}'")
+				value => value,
+				error => throw new UnwrapException($"{Messages.UnwrapCalledOnAFaultedResult}: '{ToStringNullSafe(error)}'")
 			);
 
 		/// <summary>
@@ -215,7 +215,7 @@ namespace ResultSharp
 		/// <param name="defaultValue">default value</param>
 		/// <returns>The contained or default value</returns>
 		public T UnwrapOr(T defaultValue) =>
-			Match(val => val, _ => defaultValue);
+			Match(value => value, _ => defaultValue);
 
 		/// <summary>
 		/// Returns the contained Ok value, or computes it from the provided delegate
@@ -223,7 +223,7 @@ namespace ResultSharp
 		/// <param name="fn">operation</param>
 		/// <returns>The contained or computed value</returns>
 		public T UnwrapOrElse(Func<T> fn) =>
-			Match(val => val, _ => fn());
+			Match(value => value, _ => fn());
 
 		/// <summary>
 		/// Returns the contained Ok value, or computes it from the error value using the provided delegate
@@ -231,7 +231,7 @@ namespace ResultSharp
 		/// <param name="fn">operation</param>
 		/// <returns>The contained or computed value</returns>
 		public T UnwrapOrElse(Func<E, T> fn) =>
-			Match(val => val, fn);
+			Match(value => value, fn);
 
 		/// <summary>
 		/// Returns the contained Err value, or throws UnwrapErrException if
@@ -241,8 +241,8 @@ namespace ResultSharp
 		/// <returns>The contained error</returns>
 		public E UnwrapErr() =>
 			Match(
-				val => throw new UnwrapErrException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(val)}'"),
-				err => err
+				value => throw new UnwrapErrException($"{Messages.UnwrapErrCalledOnAnOkResult}: '{ToStringNullSafe(value)}'"),
+				error => error
 			);
 
 		/// <summary>
@@ -250,12 +250,12 @@ namespace ResultSharp
 		/// the Result is faulted
 		/// </summary>
 		/// <exception cref="ExpectException">Thrown if the Result is faulted</exception>
-		/// <param name="msg">error message</param>
+		/// <param name="message">error message</param>
 		/// <returns>The contained value</returns>
-		public T Expect(string msg) =>
+		public T Expect(string message) =>
 			Match(
 				val => val,
-				_ => throw new ExpectException(msg)
+				_ => throw new ExpectException(message)
 			);
 
 		/// <summary>
@@ -263,21 +263,21 @@ namespace ResultSharp
 		/// the Result is Ok
 		/// </summary>
 		/// <exception cref="ExpectErrException">Thrown if the Result is Ok</exception>
-		/// <param name="msg">error message</param>
+		/// <param name="message">error message</param>
 		/// <returns>The contained error</returns>
-		public E ExpectErr(string msg) =>
+		public E ExpectErr(string message) =>
 			Match(
-				_ => throw new ExpectErrException(msg),
+				_ => throw new ExpectErrException(message),
 				err => err
 			);
 
-		static string ToStringNullSafe<U>(U? val) =>
-			val?.ToString() ?? "null";
+		static string ToStringNullSafe<U>(U? value) =>
+			value?.ToString() ?? "null";
 
 		public override string ToString() =>
 			Match(
-				val => $"Ok({ToStringNullSafe(val)})",
-				err => $"Err({ToStringNullSafe(err)})"
+				value => $"Ok({ToStringNullSafe(value)})",
+				error => $"Err({ToStringNullSafe(error)})"
 			);
 
 		/// <summary>

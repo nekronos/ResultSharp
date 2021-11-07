@@ -149,7 +149,7 @@ namespace ResultSharp
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		public static Result<U> AndThen<T, U>(this Result<T, string> result, Func<T, Result<U>> fn) =>
 			result
-				.Match(val => fn(val), Result.Err<U>);
+				.Match(fn, Result.Err<U>);
 
 		/// <inheritdoc cref="Result{T, E}.AndThen{U}(Func{T, Result{U, E}})" />
 		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> fn) =>
