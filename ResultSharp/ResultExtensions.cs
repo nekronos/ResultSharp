@@ -131,14 +131,6 @@ namespace ResultSharp
 				.Combine()
 				.Map(ok);
 
-		public static Result<IEnumerable<T>, IEnumerable<E>> CombineMany<T, E>(
-			this IEnumerable<Result<IEnumerable<T>, IEnumerable<E>>> results) =>
-			results
-				.Combine(
-					ok: EnumerableExtensions.Flatten,
-					err: EnumerableExtensions.Flatten
-				);
-
 		public static Result<U, E> AndThenTry<T, U, E>(this Result<T, E> result, Func<T, U> fn)
 			where E : Exception =>
 			result
@@ -163,11 +155,5 @@ namespace ResultSharp
 		public static Result AndThen<T>(this Result<T, string> result, Func<T, Result> fn) =>
 			result
 				.Match(fn, Result.Err);
-	}
-
-	internal static class EnumerableExtensions
-	{
-		public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> nestedEnumerable) =>
-			nestedEnumerable.SelectMany(x => x);
 	}
 }
