@@ -1,21 +1,20 @@
 ﻿using System;
 
-namespace ResultSharp.Tests
-{
-	class DivideByZeroException : Exception
-	{
-		public override bool Equals(object? obj) =>
-			obj is DivideByZeroException;
-		public override int GetHashCode() => base.GetHashCode();
-	}
+namespace ResultSharp.Tests;
 
-	static class TestStubs
-	{
-		public static int Divide(int dividend, int divisor) =>
-			divisor switch
-			{
-				0 => throw new DivideByZeroException(),
-				_ => dividend / divisor,
-			};
-	}
+class DivideByZeroException : Exception
+{
+    public override bool Equals(object? obj) =>
+        obj is DivideByZeroException;
+    public override int GetHashCode() => base.GetHashCode();
+}
+
+static class TestStubs
+{
+    public static int Divide(int dividend, int divisor) =>
+        divisor switch
+        {
+            0 => throw new DivideByZeroException(),
+            _ => dividend / divisor,
+        };
 }

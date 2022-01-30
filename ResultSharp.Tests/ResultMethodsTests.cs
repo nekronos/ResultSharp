@@ -2,62 +2,61 @@
 using Xunit;
 using static ResultSharp.Prelude;
 
-namespace ResultSharp.Tests
+namespace ResultSharp.Tests;
+
+public class ResultMethodsTests
 {
-	public class ResultMethodsTests
-	{
-		[Fact]
-		public void OkIf_TrueCondition_ReturnsOkResult()
-		{
-			var expected = Ok(10);
-			var actual = Result.OkIf(true, 10, "foo");
+    [Fact]
+    public void OkIf_TrueCondition_ReturnsOkResult()
+    {
+        var expected = Ok(10);
+        var actual = Result.OkIf(true, 10, "foo");
 
-			actual.Should().Be(expected);
-		}
+        actual.Should().Be(expected);
+    }
 
-		[Fact]
-		public void ErrIf_TrueCondition_ReturnsFaultedResult()
-		{
-			var expected = Err("foo");
-			var actual = Result.ErrIf(true, 0, "foo");
+    [Fact]
+    public void ErrIf_TrueCondition_ReturnsFaultedResult()
+    {
+        var expected = Err("foo");
+        var actual = Result.ErrIf(true, 0, "foo");
 
-			actual.Should().Be(expected);
-		}
+        actual.Should().Be(expected);
+    }
 
-		[Fact]
-		public void OkIf_TrueConditionWithNonStringErrType_ReturnsOkResult()
-		{
-			var expected = Ok("foo");
-			var actual = Result.OkIf(true, "foo", -1);
+    [Fact]
+    public void OkIf_TrueConditionWithNonStringErrType_ReturnsOkResult()
+    {
+        var expected = Ok("foo");
+        var actual = Result.OkIf(true, "foo", -1);
 
-			actual.Should().Be(expected);
-		}
+        actual.Should().Be(expected);
+    }
 
-		[Fact]
-		public void ErrIf_TrueConditionWithNonStringErrType_ReturnsFaultedResult()
-		{
-			var expected = Err(-1);
-			var actual = Result.ErrIf(true, "foo", -1);
+    [Fact]
+    public void ErrIf_TrueConditionWithNonStringErrType_ReturnsFaultedResult()
+    {
+        var expected = Err(-1);
+        var actual = Result.ErrIf(true, "foo", -1);
 
-			actual.Should().Be(expected);
-		}
+        actual.Should().Be(expected);
+    }
 
-		[Fact]
-		public void OkIf_TrueConditionWithoutOkValue_ReturnsOkResult()
-		{
-			var expected = Result.Ok();
-			var actual = Result.OkIf(true, "foo");
+    [Fact]
+    public void OkIf_TrueConditionWithoutOkValue_ReturnsOkResult()
+    {
+        var expected = Result.Ok();
+        var actual = Result.OkIf(true, "foo");
 
-			actual.Should().Be(expected);
-		}
+        actual.Should().Be(expected);
+    }
 
-		[Fact]
-		public void ErrIf_TrueConditionWithoutOkValue_ReturnsFaultedResult()
-		{
-			var expected = Result.Err("foo");
-			var actual = Result.ErrIf(true, "foo");
+    [Fact]
+    public void ErrIf_TrueConditionWithoutOkValue_ReturnsFaultedResult()
+    {
+        var expected = Result.Err("foo");
+        var actual = Result.ErrIf(true, "foo");
 
-			actual.Should().Be(expected);
-		}
-	}
+        actual.Should().Be(expected);
+    }
 }

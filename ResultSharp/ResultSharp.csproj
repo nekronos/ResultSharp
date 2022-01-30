@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5</TargetFramework>
-		<LangVersion>9.0</LangVersion>
+		<TargetFramework>net6</TargetFramework>
+		<LangVersion>10.0</LangVersion>
 		<OutputType>library</OutputType>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
