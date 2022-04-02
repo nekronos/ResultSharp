@@ -39,10 +39,10 @@ namespace ResultSharp
 		public Type ErrType => Inner.ErrType;
 
 		internal static Result<T> Ok(T value) =>
-			new(Result<T, string>.Ok(value));
+			new Result<T>(Result<T, string>.Ok(value));
 
 		internal static Result<T> Err(string error) =>
-			new(Result<T, string>.Err(error));
+			new Result<T>(Result<T, string>.Err(error));
 
 		/// <inheritdoc cref="Result{T, E}.Match{Ret}(Func{T, Ret}, Func{E, Ret})"/>
 		public Ret Match<Ret>(Func<T, Ret> ok, Func<string, Ret> err) =>
@@ -168,15 +168,15 @@ namespace ResultSharp
 			!(lhs == rhs);
 
 		public static implicit operator Result<T>(ResultOk<T> resultOk) =>
-			new(resultOk);
+			new Result<T>(resultOk);
 
 		public static implicit operator Result<T>(ResultErr<string> resultErr) =>
-			new(resultErr);
+			new Result<T>(resultErr);
 
 		public static implicit operator Result<T, string>(Result<T> result) =>
 			result.Inner;
 
 		public static implicit operator Result<T>(Result<T, string> result) =>
-			new(result);
+			new Result<T>(result);
 	}
 }

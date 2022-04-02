@@ -5,13 +5,13 @@ namespace ResultSharp
 	public static class Prelude
 	{
 		public static ResultOk<Unit> Ok() =>
-			new(Unit.Default);
+			new ResultOk<Unit>(Unit.Default);
 
 		public static ResultOk<T> Ok<T>(T value) =>
-			new(value);
+			new ResultOk<T>(value);
 
 		public static ResultErr<E> Err<E>(E error) =>
-			new(error);
+			new ResultErr<E>(error);
 
 		/// <inheritdoc cref="Result.OkIf{T}(bool, T, string)"/>
 		public static Result<T> OkIf<T>(bool condition, T Value, string error) =>

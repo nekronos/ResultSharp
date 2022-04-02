@@ -26,10 +26,10 @@ namespace ResultSharp
 			info.AddValue(nameof(Inner), Inner);
 
 		public static Result Ok() =>
-			new(Ok<Unit, string>(Unit.Default));
+			new Result(Ok<Unit, string>(Unit.Default));
 
 		public static Result Err(string error) =>
-			new(Err<Unit, string>(error));
+			new Result(Err<Unit, string>(error));
 
 		/// <inheritdoc cref="Result{T, E}.IsOk" />
 		public bool IsOk =>
@@ -139,7 +139,7 @@ namespace ResultSharp
 			Err(resultErr.Error);
 
 		public static implicit operator Result(Result<Unit, string> result) =>
-			new(result);
+			new Result(result);
 
 		public static implicit operator Result<Unit, string>(Result result) =>
 			result.Inner;

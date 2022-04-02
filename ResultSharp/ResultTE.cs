@@ -69,10 +69,10 @@ namespace ResultSharp
 		}
 
 		internal static Result<T, E> Ok(T value) =>
-			new(value);
+			new Result<T, E>(value);
 
 		internal static Result<T, E> Err(E error) =>
-			new(error);
+			new Result<T, E>(error);
 
 		/// <summary>
 		/// Is the Result in the Ok state
@@ -271,7 +271,7 @@ namespace ResultSharp
 				err => err
 			);
 
-		static string ToStringNullSafe<U>(U? value) =>
+		static string ToStringNullSafe<U>(U value) =>
 			value?.ToString() ?? "null";
 
 		public override string ToString() =>
