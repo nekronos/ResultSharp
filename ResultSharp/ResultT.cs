@@ -34,10 +34,10 @@ public readonly struct Result<T> :
     /// <inheritdoc cref="Result{T, E}.ErrType" />
     public Type ErrType => Inner.ErrType;
 
-    internal static Result<T> Ok(T value) =>
+    public static Result<T> Ok(T value) =>
         new(Result<T, string>.Ok(value));
 
-    internal static Result<T> Err(string error) =>
+    public static Result<T> Err(string error) =>
         new(Result<T, string>.Err(error));
 
     /// <inheritdoc cref="Result{T, E}.Match{Ret}(Func{T, Ret}, Func{E, Ret})"/>

@@ -64,10 +64,10 @@ public readonly struct Result<T, E> :
         );
     }
 
-    internal static Result<T, E> Ok(T value) =>
+    public static Result<T, E> Ok(T value) =>
         new(value);
 
-    internal static Result<T, E> Err(E error) =>
+    public static Result<T, E> Err(E error) =>
         new(error);
 
     /// <summary>
