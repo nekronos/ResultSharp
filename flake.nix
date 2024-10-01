@@ -21,7 +21,7 @@
       eachSystem = nixpkgs.lib.genAttrs (import systems);
       nixpkgsFor = eachSystem (system: import nixpkgs { inherit system; });
     in
-    {
+    rec {
       packages = eachSystem (
         system:
         let
@@ -34,12 +34,28 @@
             version = "3.0.0";
 
             src = ./.;
-            nativeBuildInputs = [ pkgs.omnisharp-roslyn ];
             nugetDeps = ./deps.nix;
             dotnet-sdk = pkgs.dotnet-sdk_8;
             dotnet-runtime = pkgs.dotnet-runtime_8;
             projectFile = "ResultSharp.sln";
             packNupkg = true;
+          };
+        }
+      );
+      devShells = eachSystem (
+        system:
+        let
+          pkgs = nixpkgsFor.${system};
+          defaultPackage = packages.${system}.default;
+        in
+        {
+          default = pkgs.mkShell {
+            packages =
+              with pkgs;
+              [
+                omnisharp-roslyn
+              ]
+              ++ defaultPackage.nativeBuildInputs;
           };
         }
       );
