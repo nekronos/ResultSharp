@@ -34,7 +34,7 @@
             projectFile = "ResultSharp/ResultSharp.csproj";
             testProjectFile = "ResultSharp.Tests/ResultSharp.Tests.csproj";
             doCheck = true;
-            # packNupkg = true;
+            packNupkg = true;
           };
         };
         devShells = {
