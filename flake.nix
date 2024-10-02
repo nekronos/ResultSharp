@@ -5,59 +5,48 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
-    systems.url = "github:nix-systems/default";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      systems,
+      flake-utils,
       ...
     }:
-    let
-      lastModifiedDate = self.lastModifiedDate or self.lastModified or "19700101";
-      version = builtins.substring 0 8 lastModifiedDate;
-      eachSystem = nixpkgs.lib.genAttrs (import systems);
-      nixpkgsFor = eachSystem (system: import nixpkgs { inherit system; });
-    in
-    rec {
-      packages = eachSystem (
-        system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        lastModifiedDate = self.lastModifiedDate or self.lastModified or "19700101";
+        version = builtins.substring 0 8 lastModifiedDate;
+      in
+      rec {
+        packages = {
           default = pkgs.buildDotnetModule {
             pname = "ResultSharp";
-            #            inherit version;
             version = "3.0.0";
-
             src = ./.;
             nugetDeps = ./deps.nix;
             dotnet-sdk = pkgs.dotnet-sdk_8;
             dotnet-runtime = pkgs.dotnet-runtime_8;
-            projectFile = "ResultSharp.sln";
-            packNupkg = true;
+            projectFile = "ResultSharp/ResultSharp.csproj";
+            testProjectFile = "ResultSharp.Tests/ResultSharp.Tests.csproj";
+            doCheck = true;
+            # packNupkg = true;
           };
-        }
-      );
-      devShells = eachSystem (
-        system:
-        let
-          pkgs = nixpkgsFor.${system};
-          defaultPackage = packages.${system}.default;
-        in
-        {
+        };
+        devShells = {
           default = pkgs.mkShell {
             packages =
               with pkgs;
               [
                 omnisharp-roslyn
               ]
-              ++ defaultPackage.nativeBuildInputs;
+              ++ packages.default.nativeBuildInputs;
           };
-        }
-      );
-    };
+        };
+      }
+    );
 }
